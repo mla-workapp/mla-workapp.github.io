@@ -141,6 +141,43 @@ table.list tr:hover td { background: var(--accent-soft); cursor: pointer; }
 .bar { height: 6px; background: var(--col); border-radius: 3px; overflow: hidden; width: 140px; }
 .bar i { display: block; height: 100%; background: var(--accent); }
 
+/* Structure tree */
+.tree { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+.trow { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); min-height: 42px; flex-wrap: wrap; }
+.trow:last-child { border-bottom: 0; }
+.trow:hover { background: var(--accent-soft); }
+.trow.proj-row { background: var(--col); font-weight: 600; }
+.trow.proj-row:hover { background: var(--accent-soft); }
+.trow .tog { width: 26px; height: 26px; padding: 0; border: 0; background: transparent; color: var(--muted); flex: none; }
+.trow .tog.leaf { visibility: hidden; }
+.trow .ttl { border: 0; background: transparent; padding: 0; text-align: start; font-weight: inherit; flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.trow .ttl:hover { color: var(--accent); text-decoration: underline; }
+.trow.done .ttl { color: var(--muted); text-decoration: line-through; }
+.trow .tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.trow .acts { display: flex; gap: 4px; align-items: center; }
+.trow .acts button { padding: 2px 8px; font-size: 12px; }
+.trow select.assign { width: auto; padding: 2px 6px; font-size: 12px; }
+.lvl { font-size: 11px; color: var(--faint); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; white-space: nowrap; }
+.tadd { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tadd input { flex: 1 1 200px; }
+.tadd select { width: auto; }
+.treehead { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin: 18px 0 8px; }
+.treehead h2 { font-size: 15px; margin: 0; }
+.crumbs { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.crumbs a { cursor: pointer; }
+.subrow { display: flex; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.subrow a { flex: 1 1 180px; overflow-wrap: anywhere; }
+.subrow.done a { color: var(--muted); text-decoration: line-through; }
+.bulk { position: sticky; top: 64px; z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; }
+.bulk select { width: auto; max-width: 260px; }
+table.list td.sel, table.list th.sel { width: 34px; }
+table.list input[type=checkbox] { width: 18px; height: 18px; }
+.boardbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+.boardbar select { width: auto; }
+.boardbar label { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
+.boardbar input[type=checkbox] { width: auto; }
+.card .parent { font-size: 12px; color: var(--muted); margin-bottom: 3px; overflow-wrap: anywhere; }
+
 /* Dialog */
 .overlay { position: fixed; inset: 0; background: rgba(10,15,25,.45); z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 4vh 12px; overflow-y: auto; }
 .dialog { background: var(--panel); border-radius: 14px; width: min(860px, 100%); box-shadow: 0 10px 40px rgba(0,0,0,.25); }
@@ -247,6 +284,13 @@ const T = {
     readOnly: 'شما اجازهٔ تغییر ندارید (فقط خواندن).', offlineHistory: 'تاریخچه فقط وقتی آنلاین هستید نمایش داده می‌شود.',
     today: 'امروز', prev: 'قبلی', next: 'بعدی', signinToSync: 'برای همگام‌سازی دوباره وارد شوید',
     fromTrello: 'از ترلو', loading: 'در حال بارگذاری…', saved: 'ذخیره شد',
+    l_project: 'پروژه', l_task: 'کار', l_subtask: 'کار فرعی', unclustered: 'کارهای بدون پروژه', unclusteredHint: 'این کارها به هیچ پروژه‌ای وصل نیستند. از فهرست کنار هر کار، پروژهٔ آن را انتخاب کنید.',
+    closedProjects: 'پروژه‌های بسته‌شده', expandAll: 'باز کردن همه', collapseAll: 'بستن همه', hideDone: 'پنهان کردن تکمیل‌شده',
+    addTask: '+ کار', addSub: '+ کار فرعی', assignTo: 'افزودن به پروژه…', editProject: 'ویرایش پروژه', target: 'تاریخ هدف',
+    p_active: 'فعال', p_done: 'بسته‌شده', deleteProject: 'حذف پروژه', deleteProjectConfirm: 'برای حذف دوباره کلیک کنید (کارها باقی می‌مانند)',
+    selected: 'انتخاب شده', apply: 'اعمال', moveToProject: 'انتقال به پروژه…', makeSubOf: 'کار فرعیِ…', clearSel: 'لغو انتخاب',
+    showSubtasks: 'نمایش کارهای فرعی', allProjects: 'همه پروژه‌ها', subOf: 'کار فرعیِ', overdueN: 'گذشته از موعد', noProjects: 'هنوز پروژه‌ای ساخته نشده است.',
+    removeProject: 'بدون پروژه', projectNameRequired: 'نام پروژه لازم است.',
     types: { Task: 'کار', Request: 'درخواست', Meeting: 'جلسه', Idea: 'ایده', Reference: 'مرجع' },
     priorities: { '': '—', urgent: 'فوری', high: 'بلند', medium: 'متوسط', low: 'پایین' },
     recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار' },
@@ -277,6 +321,13 @@ const T = {
     readOnly: 'You can view but not change this.', offlineHistory: 'History is only shown when you are online.',
     today: 'Today', prev: 'Previous', next: 'Next', signinToSync: 'Sign in again to sync',
     fromTrello: 'From Trello', loading: 'Loading…', saved: 'Saved',
+    l_project: 'Project', l_task: 'Task', l_subtask: 'Sub-task', unclustered: 'Tasks without a project', unclusteredHint: 'These tasks are not linked to any project. Choose a project from the list next to each one.',
+    closedProjects: 'Closed projects', expandAll: 'Expand all', collapseAll: 'Collapse all', hideDone: 'Hide completed',
+    addTask: '+ Task', addSub: '+ Sub-task', assignTo: 'Add to project…', editProject: 'Edit project', target: 'Target date',
+    p_active: 'Active', p_done: 'Closed', deleteProject: 'Delete project', deleteProjectConfirm: 'Click again to delete (tasks are kept)',
+    selected: 'selected', apply: 'Apply', moveToProject: 'Move to project…', makeSubOf: 'Make sub-tasks of…', clearSel: 'Clear selection',
+    showSubtasks: 'Show sub-tasks', allProjects: 'All projects', subOf: 'Sub-task of', overdueN: 'overdue', noProjects: 'No projects yet.',
+    removeProject: 'No project', projectNameRequired: 'A project needs a name.',
     types: { Task: 'Task', Request: 'Request', Meeting: 'Meeting', Idea: 'Idea', Reference: 'Reference' },
     priorities: { '': '—', urgent: 'Urgent', high: 'High', medium: 'Medium', low: 'Low' },
     recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly' },
@@ -310,6 +361,8 @@ const S = {
   idToken: null, tokenExp: 0, syncing: false, syncError: '', needSignin: false, lastSync: 0,
   view: 'board', board: '', search: '', filters: { board: '', status: '', owner: '', label: '', overdue: false, done: false },
   sort: { key: 'due_date', dir: 1 }, calMonth: null, openCard: null, quickAdd: null,
+  treeOpen: null, treeFilter: { board: '', owner: '', hideDone: false }, treeAdd: null,
+  boardProject: '', boardSubs: false, selected: new Set(), kids: {},
 };
 
 /* ------------------------------------------------------------------ */
@@ -415,6 +468,62 @@ function userName(email) {
 const initials = email => { const n = userName(email).trim(); return n ? n.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase() : '?'; };
 const cards = () => Object.values(S.t.Cards).filter(c => !isYes(c.archived));
 const isDone = c => c.status === 'completed' || c.status === 'archive';
+
+/* Project › Task › Sub-task structure */
+function buildKids() {
+  const m = {};
+  cards().forEach(c => { if (c.parent_card_id && S.t.Cards[c.parent_card_id] && !isYes(S.t.Cards[c.parent_card_id].archived)) (m[c.parent_card_id] = m[c.parent_card_id] || []).push(c); });
+  Object.values(m).forEach(list => list.sort(sortForColumn));
+  S.kids = m;
+  return m;
+}
+function descendants(id) {
+  const out = [], seen = new Set([id]);
+  const walk = x => (S.kids[x] || []).forEach(k => { if (!seen.has(k.card_id)) { seen.add(k.card_id); out.push(k); walk(k.card_id); } });
+  walk(id);
+  return out;
+}
+function ancestors(c) {
+  const out = [], seen = new Set([c.card_id]);
+  let p = c.parent_card_id && S.t.Cards[c.parent_card_id];
+  while (p && !isYes(p.archived) && !seen.has(p.card_id)) { seen.add(p.card_id); out.unshift(p); p = p.parent_card_id && S.t.Cards[p.parent_card_id]; }
+  return out;
+}
+function projectOf(c) { const p = c && c.project_id && S.t.Projects[c.project_id]; return p && !isYes(p.archived) ? p : null; }
+function projectsList(includeClosed) {
+  return Object.values(S.t.Projects).filter(p => !isYes(p.archived) && (includeClosed || p.status !== 'done')).sort((a, b) => String(a.name).localeCompare(String(b.name)));
+}
+function stats(list) {
+  const today = todayStr();
+  const done = list.filter(isDone).length;
+  return { done, total: list.length, pct: list.length ? Math.round(done * 100 / list.length) : 0,
+    overdue: list.filter(c => c.due_date && c.due_date < today && !isDone(c)).length };
+}
+/** Puts a task (and all its sub-tasks) into a project. A task moved to another project leaves its old parent. */
+function setProject(c, pid) {
+  const fields = { project_id: pid };
+  const parent = c.parent_card_id && S.t.Cards[c.parent_card_id];
+  if (parent && (parent.project_id || '') !== pid) fields.parent_card_id = '';
+  if ((c.project_id || '') !== pid || fields.parent_card_id === '') change('Cards', c.card_id, fields);
+  descendants(c.card_id).forEach(d => { if ((d.project_id || '') !== pid) change('Cards', d.card_id, { project_id: pid }); });
+}
+/** Makes a task a sub-task of another; it joins the parent's project, and so do its own sub-tasks. */
+function setParent(c, parentId) {
+  if (parentId === c.card_id || descendants(c.card_id).some(d => d.card_id === parentId)) return;
+  const parent = parentId && S.t.Cards[parentId];
+  const pid = parent ? (parent.project_id || '') : (c.project_id || '');
+  change('Cards', c.card_id, pid !== (c.project_id || '') ? { parent_card_id: parentId, project_id: pid } : { parent_card_id: parentId });
+  if (parent) descendants(c.card_id).forEach(d => { if ((d.project_id || '') !== pid) change('Cards', d.card_id, { project_id: pid }); });
+}
+function treeOpen() {
+  if (!S.treeOpen) {
+    let saved = null;
+    try { saved = JSON.parse(lsGet('mla_tree') || 'null'); } catch (e) {}
+    S.treeOpen = new Set(saved || projectsList(true).map(p => 'p:' + p.project_id).concat(['p:none']));
+  }
+  return S.treeOpen;
+}
+function saveTree() { lsSet('mla_tree', JSON.stringify([...treeOpen()])); }
 function dueClass(c) {
   if (!c.due_date || isDone(c)) return c.due_date && isDone(c) ? 'done' : '';
   const today = todayStr();
@@ -674,6 +783,7 @@ function renderSync() {
 
 function render() {
   if (!S.meta) { renderSync(); return; }
+  buildKids();
   const fa = S.lang === 'fa';
   const name = fa ? S.meta.app.name_dari : S.meta.app.name_en;
   $('app-name').textContent = name;
@@ -707,12 +817,19 @@ function cardTile(c, opts = {}) {
   const labels = String(c.labels || '').split(',').filter(Boolean);
   const dc = dueClass(c);
   const board = S.t.Boards[c.board_id];
+  const proj = projectOf(c);
+  const subs = descendants(c.card_id);
+  const sst = stats(subs);
+  const parent = c.parent_card_id && S.t.Cards[c.parent_card_id];
   return `<div class="card" role="button" tabindex="0" data-card="${esc(c.card_id)}" ${opts.drag ? 'draggable="true"' : ''}>
     ${labels.length ? `<div class="labels">${labels.map(l => `<span class="lbl ${LABEL_COLORS[l] || 'grey'}"></span>`).join('')}</div>` : ''}
+    ${parent && !isYes(parent.archived) ? `<div class="parent">↳ ${esc(t('subOf'))} ${esc(parent.title.slice(0, 50))}</div>` : ''}
     <div class="t">${esc(c.title)}</div>
     <div class="meta">
       ${opts.showBoard && board ? `<span class="badge">${esc(boardName(board))}</span>` : ''}
       ${opts.showStage ? `<span class="badge">${esc(stageName(c.status))}</span>` : ''}
+      ${proj && !opts.hideProject ? `<span class="badge" title="${esc(proj.name)}">📁 ${esc(String(proj.name).slice(0, 22))}</span>` : ''}
+      ${subs.length ? `<span class="badge ${sst.done === sst.total ? 'done' : sst.overdue ? 'overdue' : ''}" title="${esc(t('subtasks'))}">⤷ ${sst.done}/${sst.total}</span>` : ''}
       ${c.due_date ? `<span class="badge ${dc}">⏱ ${esc(fmtDate(c.due_date))}</span>` : ''}
       ${items.length ? `<span class="badge ${done === items.length ? 'done' : ''}">☑ ${done}/${items.length}</span>` : ''}
       ${ncomments ? `<span class="badge">💬 ${ncomments}</span>` : ''}
@@ -726,8 +843,14 @@ function cardTile(c, opts = {}) {
 function renderBoard() {
   const all = cards().filter(c => c.board_id === S.board && matchesSearch(c));
   const refs = all.filter(c => c.type === 'Reference');
-  const work = all.filter(c => c.type !== 'Reference' && !c.parent_card_id);
-  let h = '';
+  const parentHere = c => c.parent_card_id && S.t.Cards[c.parent_card_id] && !isYes(S.t.Cards[c.parent_card_id].archived);
+  const work = all.filter(c => c.type !== 'Reference' && (S.boardSubs || !parentHere(c) || S.t.Cards[c.parent_card_id].board_id !== S.board)
+    && (!S.boardProject || (S.boardProject === '-' ? !projectOf(c) : c.project_id === S.boardProject)));
+  const projs = projectsList(false);
+  let h = `<div class="boardbar">
+    <select data-boardproject>${[['', t('allProjects')], ['-', t('removeProject')]].concat(projs.map(p => [p.project_id, '📁 ' + p.name])).map(([v, l]) => `<option value="${esc(v)}" ${S.boardProject === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
+    <label><input type="checkbox" data-boardsubs ${S.boardSubs ? 'checked' : ''}> ${esc(t('showSubtasks'))}</label>
+  </div>`;
   if (refs.length) {
     h += `<details class="refs"><summary>📌 ${esc(t('reference'))} (${refs.length})</summary><div class="row">
       ${refs.map(c => `<button data-card="${esc(c.card_id)}">${esc(c.title)}</button>`).join('')}</div></details>`;
@@ -802,12 +925,23 @@ function renderList() {
   </div>`;
   const list = filteredList();
   const k = S.sort.key, d = S.sort.dir;
-  const val = c => k === 'board' ? boardName(S.t.Boards[c.board_id]) : k === 'owner' ? userName(c.owner_email) : k === 'status' ? stages().findIndex(s => s.id === c.status) : (c[k] || (k === 'due_date' ? '9999' : ''));
+  const val = c => k === 'project' ? ((projectOf(c) || {}).name || '\uffff') : k === 'board' ? boardName(S.t.Boards[c.board_id]) : k === 'owner' ? userName(c.owner_email) : k === 'status' ? stages().findIndex(s => s.id === c.status) : (c[k] || (k === 'due_date' ? '9999' : ''));
   list.sort((a, b) => (val(a) < val(b) ? -1 : val(a) > val(b) ? 1 : 0) * d);
   const th = (key, label) => `<th data-sort="${key}">${esc(label)}${k === key ? (d > 0 ? ' ▲' : ' ▼') : ''}</th>`;
-  h += `<div class="tablewrap"><table class="list"><thead><tr>${th('title', t('title'))}${th('board', t('board'))}${th('status', t('status'))}${th('owner', t('owner'))}${th('due_date', t('due'))}</tr></thead><tbody>
-    ${list.map(c => `<tr data-card="${esc(c.card_id)}"><td>${esc(c.title)}</td><td>${esc(boardName(S.t.Boards[c.board_id]))}</td><td>${esc(stageName(c.status))}</td>
-      <td>${esc(userName(c.owner_email))}</td><td>${c.due_date ? `<span class="badge ${dueClass(c)}">${esc(c.due_date)}</span>` : ''}</td></tr>`).join('')}
+  const ids = new Set(list.map(c => c.card_id));
+  [...S.selected].forEach(id => { if (!ids.has(id)) S.selected.delete(id); });
+  const nsel = S.selected.size;
+  if (nsel && canEdit()) {
+    const parents = cards().filter(c => c.type !== 'Reference' && !S.selected.has(c.card_id)).sort((a, b) => a.title.localeCompare(b.title));
+    h += `<div class="bulk"><b>${nsel} ${esc(t('selected'))}</b>
+      <select id="bulk-project"><option value="">${esc(t('moveToProject'))}</option><option value="-">${esc(t('removeProject'))}</option>${projectsList(false).map(p => `<option value="${esc(p.project_id)}">📁 ${esc(p.name)}</option>`).join('')}</select>
+      <select id="bulk-parent"><option value="">${esc(t('makeSubOf'))}</option>${parents.map(c => `<option value="${esc(c.card_id)}">${esc(c.title.slice(0, 70))}</option>`).join('')}</select>
+      <button class="primary" data-bulkapply>${esc(t('apply'))}</button><button data-bulkclear>${esc(t('clearSel'))}</button></div>`;
+  }
+  const allSel = list.length && list.every(c => S.selected.has(c.card_id));
+  h += `<div class="tablewrap"><table class="list"><thead><tr>${canEdit() ? `<th class="sel"><input type="checkbox" data-selectall ${allSel ? 'checked' : ''} aria-label="select all"></th>` : ''}${th('title', t('title'))}${th('project', t('project'))}${th('board', t('board'))}${th('status', t('status'))}${th('owner', t('owner'))}${th('due_date', t('due'))}</tr></thead><tbody>
+    ${list.map(c => { const p = projectOf(c); const par = c.parent_card_id && S.t.Cards[c.parent_card_id]; return `<tr data-card="${esc(c.card_id)}">${canEdit() ? `<td class="sel"><input type="checkbox" data-select="${esc(c.card_id)}" ${S.selected.has(c.card_id) ? 'checked' : ''}></td>` : ''}<td>${par ? `<span class="small muted">↳ ${esc(par.title.slice(0, 40))} › </span>` : ''}${esc(c.title)}</td><td>${p ? esc(p.name) : ''}</td><td>${esc(boardName(S.t.Boards[c.board_id]))}</td><td>${esc(stageName(c.status))}</td>
+      <td>${esc(userName(c.owner_email))}</td><td>${c.due_date ? `<span class="badge ${dueClass(c)}">${esc(c.due_date)}</span>` : ''}</td></tr>`; }).join('')}
   </tbody></table></div>${list.length ? '' : `<div class="empty">${esc(t('empty'))}</div>`}`;
   return h;
 }
@@ -837,19 +971,125 @@ function renderCalendar() {
 }
 
 function renderProjects() {
-  const projects = Object.values(S.t.Projects).filter(p => !isYes(p.archived)).sort((a, b) => a.name.localeCompare(b.name));
-  let h = canEdit() ? `<div class="filters"><button class="primary" data-newproject>${esc(t('newProject'))}</button></div>` : '';
-  if (!projects.length) h += `<div class="empty">${esc(t('empty'))}</div>`;
-  projects.forEach(p => {
-    const list = cards().filter(c => c.project_id === p.project_id && matchesSearch(c));
-    const done = list.filter(isDone).length;
-    const pct = list.length ? Math.round(done / list.length * 100) : 0;
-    h += `<details class="proj" ${S.openProject === p.project_id ? 'open' : ''} data-project="${esc(p.project_id)}"><summary>${esc(p.name)}
-      <span class="bar"><i style="width:${pct}%"></i></span><span class="small muted">${done}/${list.length} ${esc(t('cards'))}</span>
-      ${p.owner_email ? `<span class="small muted">· ${esc(userName(p.owner_email))}</span>` : ''}</summary>
-      <div class="stack" style="margin-top:10px">${list.map(c => cardTile(c, { showBoard: true, showStage: true })).join('') || `<div class="empty">${esc(t('empty'))}</div>`}</div></details>`;
-  });
+  const open = treeOpen();
+  const f = S.treeFilter;
+  const opt = (v, label, sel) => `<option value="${esc(v)}" ${sel === v ? 'selected' : ''}>${esc(label)}</option>`;
+  const passes = c => (!f.board || c.board_id === f.board) && (!f.owner || c.owner_email === f.owner) && (!f.hideDone || !isDone(c)) && matchesSearch(c);
+  const shows = c => passes(c) || descendants(c.card_id).some(passes);
+  const filtering = !!(f.board || f.owner || f.hideDone || S.search);
+  const work = cards().filter(c => c.type !== 'Reference');
+  const isRootIn = (c, pid) => {
+    const par = c.parent_card_id && S.t.Cards[c.parent_card_id];
+    return (c.project_id || '') === pid && !(par && !isYes(par.archived) && (par.project_id || '') === pid);
+  };
+  const ownerTag = email => email ? `<span class="avatar" title="${esc(userName(email))}">${esc(initials(email))}</span><span class="small muted">${esc(userName(email))}</span>` : '';
+
+  function row(c, depth, pidCtx) {
+    const kids = (S.kids[c.card_id] || []).filter(k => (k.project_id || '') === pidCtx && shows(k));
+    const all = descendants(c.card_id);
+    const st = stats(all);
+    const isOpen = open.has(c.card_id) || (filtering && kids.length > 0);
+    const dc = dueClass(c);
+    let h = `<div class="trow ${isDone(c) ? 'done' : ''}" style="padding-inline-start:${12 + depth * 24}px">
+      <button class="tog ${kids.length ? '' : 'leaf'}" data-toggle="${esc(c.card_id)}" aria-label="toggle">${isOpen ? '▾' : '▸'}</button>
+      <span class="lvl">${esc(depth > 1 ? t('l_subtask') : t('l_task'))}</span>
+      <button class="ttl" data-card="${esc(c.card_id)}">${esc(c.title)}</button>
+      <span class="tags">
+        <span class="badge">${esc(stageName(c.status))}</span>
+        <span class="badge">${esc(boardName(S.t.Boards[c.board_id]))}</span>
+        ${all.length ? `<span class="badge ${st.done === st.total ? 'done' : st.overdue ? 'overdue' : ''}">⤷ ${st.done}/${st.total}</span>` : ''}
+        ${c.due_date ? `<span class="badge ${dc}">⏱ ${esc(fmtDate(c.due_date))}</span>` : ''}
+        ${c.owner_email ? ownerTag(c.owner_email) : (!isDone(c) ? `<span class="badge warn">${esc(t('noOwner'))}</span>` : '')}
+      </span>
+      <span class="acts">
+        ${!pidCtx && depth === 1 && canEdit() ? `<select class="assign" data-assign="${esc(c.card_id)}"><option value="">${esc(t('assignTo'))}</option>${projectsList(false).map(p => `<option value="${esc(p.project_id)}">📁 ${esc(p.name)}</option>`).join('')}</select>` : ''}
+        ${canEdit() ? `<button data-treeadd="c:${esc(c.card_id)}">${esc(t('addSub'))}</button>` : ''}
+      </span>
+    </div>`;
+    if (S.treeAdd === 'c:' + c.card_id) h += addForm('c:' + c.card_id, depth + 1, false, c.board_id);
+    if (isOpen) kids.forEach(k => { h += row(k, depth + 1, pidCtx); });
+    return h;
+  }
+  function addForm(key, depth, needBoard, board) {
+    return `<form class="tadd" data-treeaddform="${esc(key)}" style="padding-inline-start:${12 + depth * 24}px">
+      <input id="tree-add-input" placeholder="${esc(t('title'))}" maxlength="300">
+      ${needBoard ? `<select id="tree-add-board">${boardsList().map(b => opt(b.board_id, boardName(b), board)).join('')}</select>` : ''}
+      <button class="primary">${esc(t('add'))}</button><button type="button" data-treeaddcancel>${esc(t('cancel'))}</button></form>`;
+  }
+  function projectBlock(p) {
+    const key = 'p:' + p.project_id;
+    const all = work.filter(c => c.project_id === p.project_id);
+    const roots = all.filter(c => isRootIn(c, p.project_id) && shows(c)).sort(sortForColumn);
+    if (filtering && !roots.length) return '';
+    const st = stats(all);
+    const isOpen = open.has(key) || (filtering && roots.length > 0);
+    const boardsUsed = {};
+    all.forEach(c => { boardsUsed[c.board_id] = (boardsUsed[c.board_id] || 0) + 1; });
+    const mainBoard = Object.keys(boardsUsed).sort((a, b) => boardsUsed[b] - boardsUsed[a])[0] || S.board;
+    let h = `<div class="tree" data-projectblock="${esc(p.project_id)}"><div class="trow proj-row">
+      <button class="tog" data-toggle="${esc(key)}" aria-label="toggle">${isOpen ? '▾' : '▸'}</button>
+      <span class="lvl">${esc(t('l_project'))}</span>
+      <span class="ttl">📁 ${esc(p.name)}</span>
+      <span class="tags">
+        <span class="bar" title="${st.pct}%"><i style="width:${st.pct}%"></i></span><span class="small muted">${st.done}/${st.total}</span>
+        ${st.overdue ? `<span class="badge overdue">${st.overdue} ${esc(t('overdueN'))}</span>` : ''}
+        ${p.target_date ? `<span class="badge ${p.target_date < todayStr() && p.status !== 'done' ? 'overdue' : ''}">🎯 ${esc(fmtDate(p.target_date))}</span>` : ''}
+        ${p.status === 'done' ? `<span class="badge done">${esc(t('p_done'))}</span>` : ''}
+        ${ownerTag(p.owner_email)}
+      </span>
+      <span class="acts">
+        ${canEdit() ? `<button data-treeadd="${esc(key)}">${esc(t('addTask'))}</button><button data-editproject="${esc(p.project_id)}" aria-label="${esc(t('editProject'))}">✎</button>` : ''}
+      </span></div>`;
+    if (S.treeAdd === key) h += addForm(key, 1, true, mainBoard);
+    if (isOpen) roots.forEach(c => { h += row(c, 1, p.project_id); });
+    return h + '</div>';
+  }
+
+  let h = `<div class="filters">
+    ${canEdit() ? `<button class="primary" data-newproject>${esc(t('newProject'))}</button>` : ''}
+    <select data-treefilter="board">${opt('', t('allBoards'), f.board)}${boardsList().map(b => opt(b.board_id, boardName(b), f.board)).join('')}</select>
+    <select data-treefilter="owner">${opt('', t('allOwners'), f.owner)}${activeUsers().map(u => opt(u.email, userName(u.email), f.owner)).join('')}</select>
+    <label><input type="checkbox" data-treefilter="hideDone" ${f.hideDone ? 'checked' : ''}> ${esc(t('hideDone'))}</label>
+    <button data-expandall>${esc(t('expandAll'))}</button><button data-collapseall>${esc(t('collapseAll'))}</button>
+  </div>`;
+  const active = projectsList(false);
+  if (!active.length) h += `<div class="empty">${esc(t('noProjects'))}</div>`;
+  active.forEach(p => { h += projectBlock(p); });
+
+  // Tasks without a project
+  // Finished tasks don't need sorting into projects, so only open work is listed here.
+  const loose = work.filter(c => isRootIn(c, '') && !isDone(c) && shows(c)).sort(sortForColumn);
+  if (loose.length) {
+    const isOpen = open.has('p:none') || filtering;
+    h += `<div class="treehead"><h2>${esc(t('unclustered'))} <span class="small muted">(${loose.length})</span></h2>
+      <button data-toggle="p:none">${isOpen ? '▾' : '▸'}</button></div>`;
+    if (isOpen) h += `<p class="small muted" style="margin:0 0 8px">${esc(t('unclusteredHint'))}</p><div class="tree">${loose.map(c => row(c, 1, '')).join('')}</div>`;
+  }
+
+  const closed = Object.values(S.t.Projects).filter(p => !isYes(p.archived) && p.status === 'done');
+  if (closed.length) {
+    const isOpen = open.has('p:closed');
+    h += `<div class="treehead"><h2>${esc(t('closedProjects'))} <span class="small muted">(${closed.length})</span></h2><button data-toggle="p:closed">${isOpen ? '▾' : '▸'}</button></div>`;
+    if (isOpen) closed.forEach(p => { h += projectBlock(p); });
+  }
   return h;
+}
+
+function projectDialog(id) {
+  const p = id ? S.t.Projects[id] : null;
+  const canDelete = p && (me().role === 'admin' || p.owner_email === S.email || p.created_by === S.email);
+  S.confirmDelProject = false;
+  openOverlay('project', `<div class="dialog small"><form data-saveproject="${esc(id || '')}">
+    <div class="dhead"><b>${esc(p ? t('editProject') : t('newProject').replace('+ ', ''))}</b></div>
+    <div style="padding:6px 18px 12px" class="side">
+      <div class="field"><label>${esc(t('projectName'))}</label><input id="p-name" maxlength="200" value="${esc(p ? p.name : '')}"></div>
+      <div class="field"><label>${esc(t('owner'))}</label><select id="p-owner">${activeUsers().map(u => `<option value="${esc(u.email)}" ${u.email === (p ? p.owner_email : S.email) ? 'selected' : ''}>${esc(userName(u.email))}</option>`).join('')}</select></div>
+      <div class="field"><label>${esc(t('target'))}</label><input type="date" id="p-due" value="${esc(p ? p.target_date : '')}"></div>
+      ${p ? `<div class="field"><label>${esc(t('status'))}</label><select id="p-status"><option value="active" ${p.status !== 'done' ? 'selected' : ''}>${esc(t('p_active'))}</option><option value="done" ${p.status === 'done' ? 'selected' : ''}>${esc(t('p_done'))}</option></select></div>` : ''}
+    </div>
+    <div class="actions"><button class="primary">${esc(t('save'))}</button><button type="button" data-close>${esc(t('cancel'))}</button>
+      <span class="spacer"></span>${canDelete ? `<button type="button" data-delproject="${esc(id)}" style="color:var(--danger)">${esc(t('deleteProject'))}</button>` : ''}</div></form></div>`);
+  setTimeout(() => $('p-name') && $('p-name').focus(), 30);
 }
 
 /* ------------------------------------------------------------------ */
@@ -866,13 +1106,18 @@ function renderCardDialog() {
   const opt = (v, label, sel, disabled) => `<option value="${esc(v)}" ${String(sel || '') === v ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(label)}</option>`;
   const items = Object.values(S.t.Checklist).filter(i => i.card_id === c.card_id && !isYes(i.archived)).sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0) || (a.created_at < b.created_at ? -1 : 1));
   const comments = Object.values(S.t.Comments).filter(m => m.card_id === c.card_id).sort((a, b) => a.created_at < b.created_at ? 1 : -1);
-  const subs = cards().filter(x => x.parent_card_id === c.card_id);
+  const subs = (S.kids[c.card_id] || []);
+  const allSubs = descendants(c.card_id);
+  const proj = projectOf(c);
+  const anc = ancestors(c);
+  const blocked = new Set([c.card_id].concat(allSubs.map(x => x.card_id)));
+  const parentChoices = cards().filter(x => !blocked.has(x.card_id) && x.type !== 'Reference');
   const labels = String(c.labels || '').split(',').filter(Boolean);
   const members = String(c.members || '').split(',').filter(Boolean);
   const users = activeUsers();
   if (c.owner_email && !users.some(u => u.email === c.owner_email)) users.unshift({ email: c.owner_email });
   const projects = Object.values(S.t.Projects).filter(p => !isYes(p.archived));
-  const sameBoard = cards().filter(x => x.board_id === c.board_id && x.card_id !== c.card_id && !x.parent_card_id && x.type !== 'Reference');
+
   const stageLocked = s => !isApprover() && (APPROVER_STAGES.includes(s) || APPROVER_STAGES.includes(c.status)) && s !== c.status;
   const done = items.filter(i => isYes(i.done)).length;
 
@@ -883,6 +1128,7 @@ function renderCardDialog() {
     </div>
     <div class="dbody">
       <div>
+        ${proj || anc.length ? `<nav class="crumbs">${proj ? `<a data-openproject="${esc(proj.project_id)}">📁 ${esc(proj.name)}</a>` : ''}${anc.map(a => ` › <a data-card="${esc(a.card_id)}">${esc(a.title.slice(0, 50))}</a>`).join('')} › <b>${esc(c.title.slice(0, 50))}</b></nav>` : ''}
         ${ro ? `<div class="notice">${esc(t('readOnly'))}</div>` : ''}
         ${c.source === 'trello' && c.source_ref ? `<div class="small muted" style="margin-bottom:10px">${esc(t('fromTrello'))}: <a href="${esc(c.source_ref)}" target="_blank" rel="noopener">${esc(c.source_ref.replace('https://', ''))}</a></div>` : ''}
         <div class="sec"><h4>${esc(t('labels'))}</h4><div class="chips">
@@ -897,8 +1143,11 @@ function renderCardDialog() {
             <span class="txt">${linkify(i.text)}</span>${ro ? '' : `<button class="ghost small" data-delitem="${esc(i.item_id)}" aria-label="remove">✕</button>`}</div>`).join('')}
           ${ro ? '' : `<form class="quick" data-additem style="margin-top:6px"><input id="f-item" placeholder="${esc(t('addItem'))}" maxlength="500"><button>${esc(t('add'))}</button></form>`}
         </div>
-        ${c.type !== 'Reference' ? `<div class="sec"><h4>${esc(t('subtasks'))} ${subs.length ? `<span class="small muted">${subs.filter(isDone).length}/${subs.length}</span>` : ''}</h4>
-          ${subs.map(s => `<div class="check ${isDone(s) ? 'done' : ''}"><span class="txt"><a href="#card=${esc(s.card_id)}" data-card="${esc(s.card_id)}">${esc(s.title)}</a></span><span class="badge">${esc(stageName(s.status))}</span></div>`).join('')}
+        ${c.type !== 'Reference' ? `<div class="sec"><h4>${esc(t('subtasks'))} ${allSubs.length ? `<span class="small muted">${allSubs.filter(isDone).length}/${allSubs.length}</span>` : ''}</h4>
+          ${subs.map(s => { const n = descendants(s.card_id); return `<div class="subrow ${isDone(s) ? 'done' : ''}"><a href="#card=${esc(s.card_id)}" data-card="${esc(s.card_id)}">${esc(s.title)}</a>
+            <span class="badge">${esc(stageName(s.status))}</span>${n.length ? `<span class="badge">⤷ ${n.filter(isDone).length}/${n.length}</span>` : ''}
+            ${s.due_date ? `<span class="badge ${dueClass(s)}">⏱ ${esc(fmtDate(s.due_date))}</span>` : ''}
+            ${s.owner_email ? `<span class="avatar" title="${esc(userName(s.owner_email))}">${esc(initials(s.owner_email))}</span>` : `<span class="badge warn">${esc(t('noOwner'))}</span>`}</div>`; }).join('')}
           ${ro ? '' : `<form class="quick" data-addsub style="margin-top:6px"><input id="f-sub" placeholder="${esc(t('addSubtask'))}" maxlength="300"><button>${esc(t('add'))}</button></form>`}
         </div>` : ''}
         <div class="sec"><h4>${esc(t('comments'))}</h4>
@@ -919,8 +1168,8 @@ function renderCardDialog() {
         <div class="field"><label>${esc(t('priority'))}</label><select id="f-priority" ${dis}>${Object.entries(T[S.lang].priorities).map(([v, l]) => opt(v, l, c.priority)).join('')}</select></div>
         <div class="field"><label>${esc(t('type'))}</label><select id="f-type" ${dis}>${Object.entries(T[S.lang].types).map(([v, l]) => opt(v, l, c.type || 'Task')).join('')}</select></div>
         <div class="field"><label>${esc(t('members'))}</label><div class="chips">${users.filter(u => u.email !== c.owner_email).map(u => `<button class="chip ${members.includes(u.email) ? 'on' : ''}" data-member="${esc(u.email)}" ${dis}>${esc(userName(u.email))}</button>`).join('') || `<span class="muted small">${esc(t('none'))}</span>`}</div></div>
-        <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${dis}>${opt('', t('noProject'), c.project_id)}${projects.map(p => opt(p.project_id, p.name, c.project_id)).join('')}</select></div>
-        <div class="field"><label>${esc(t('parent'))}</label><select id="f-parent" ${dis}>${opt('', t('none'), c.parent_card_id)}${sameBoard.map(x => opt(x.card_id, x.title.slice(0, 60), c.parent_card_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${dis}>${opt('', t('noProject'), c.project_id)}${projects.filter(p => p.status !== 'done' || p.project_id === c.project_id).map(p => opt(p.project_id, p.name, c.project_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('parent'))}</label><select id="f-parent" ${dis}>${opt('', t('none'), c.parent_card_id)}${boardsList().map(b => { const list = parentChoices.filter(x => x.board_id === b.board_id); return list.length ? `<optgroup label="${esc(boardName(b))}">${list.map(x => opt(x.card_id, x.title.slice(0, 60), c.parent_card_id)).join('')}</optgroup>` : ''; }).join('')}</select></div>
         <div class="field"><label>${esc(t('recurrence'))}</label><select id="f-recur" ${dis}>${Object.entries(T[S.lang].recur).map(([v, l]) => opt(v, l, c.recurrence)).join('')}</select></div>
         <div class="field"><label>${esc(t('link'))}</label><div class="quick"><input type="url" id="f-link" value="${esc(c.drive_link)}" placeholder="https://drive.google.com/…" ${dis}>${c.drive_link ? `<a class="badge" href="${esc(c.drive_link)}" target="_blank" rel="noopener">${esc(t('open'))}</a>` : ''}</div></div>
         <div class="small muted">${esc(t('created'))} ${esc(fmtTime(c.created_at))} ${c.created_by ? esc(t('by')) + ' ' + esc(userName(c.created_by)) : ''}</div>
@@ -962,18 +1211,6 @@ function openOverlay(name, html) {
 }
 function closeOverlay(name) { const ov = document.querySelector(`.overlay[data-name="${name}"]`); if (ov) ov.remove(); }
 
-function newProjectDialog() {
-  openOverlay('project', `<div class="dialog small"><form data-saveproject>
-    <div class="dhead"><b>${esc(t('newProject').replace('+ ', ''))}</b></div>
-    <div style="padding:6px 18px 12px" class="side">
-      <div class="field"><label>${esc(t('projectName'))}</label><input id="p-name" required maxlength="200"></div>
-      <div class="field"><label>${esc(t('owner'))}</label><select id="p-owner">${activeUsers().map(u => `<option value="${esc(u.email)}" ${u.email === S.email ? 'selected' : ''}>${esc(userName(u.email))}</option>`).join('')}</select></div>
-      <div class="field"><label>${esc(t('due'))}</label><input type="date" id="p-due"></div>
-    </div>
-    <div class="actions"><button class="primary">${esc(t('save'))}</button><button type="button" data-close>${esc(t('cancel'))}</button></div></form></div>`);
-  setTimeout(() => $('p-name') && $('p-name').focus(), 30);
-}
-
 async function loadHistory() {
   if (!navigator.onLine) { toast(t('offlineHistory')); return; }
   const tok = await getToken();
@@ -990,6 +1227,7 @@ async function loadHistory() {
 /* Events                                                              */
 /* ------------------------------------------------------------------ */
 document.addEventListener('click', e => {
+  if (e.target.matches && e.target.matches('input[type=checkbox], select, option')) return;
   const el = e.target.closest('button, a, tr, summary, [data-card]');
   if (!el) return;
   const d = el.dataset;
@@ -1004,7 +1242,33 @@ document.addEventListener('click', e => {
     else { const m = S.calMonth.m + Number(d.cal); S.calMonth = { y: S.calMonth.y + Math.floor(m / 12), m: (m + 12) % 12 }; }
     render(); return;
   }
-  if ('newproject' in d) { newProjectDialog(); return; }
+  if ('newproject' in d) { projectDialog(null); return; }
+  if (d.editproject) { projectDialog(d.editproject); return; }
+  if (d.delproject) {
+    const btn = el;
+    if (!S.confirmDelProject) { S.confirmDelProject = true; btn.textContent = t('deleteProjectConfirm'); return; }
+    const pid = d.delproject;
+    cards().filter(c => c.project_id === pid).forEach(c => change('Cards', c.card_id, { project_id: '' }));
+    change('Projects', pid, { archived: 'yes' });
+    delete S.t.Projects[pid];
+    closeOverlay('project'); render(); return;
+  }
+  if (d.toggle) { const o = treeOpen(); o.has(d.toggle) ? o.delete(d.toggle) : o.add(d.toggle); saveTree(); render(); return; }
+  if ('expandall' in d) { const o = treeOpen(); projectsList(true).forEach(p => o.add('p:' + p.project_id)); o.add('p:none'); Object.keys(S.kids).forEach(k => o.add(k)); saveTree(); render(); return; }
+  if ('collapseall' in d) { S.treeOpen = new Set(); saveTree(); render(); return; }
+  if (d.treeadd) { S.treeAdd = S.treeAdd === d.treeadd ? null : d.treeadd; if (d.treeadd.startsWith('c:')) treeOpen().add(d.treeadd.slice(2)); else treeOpen().add(d.treeadd); render(); setTimeout(() => $('tree-add-input') && $('tree-add-input').focus(), 0); return; }
+  if ('treeaddcancel' in d) { S.treeAdd = null; render(); return; }
+  if (d.openproject) { closeCard(); S.view = 'projects'; lsSet('mla_view', S.view); treeOpen().add('p:' + d.openproject); saveTree(); render(); const blk = document.querySelector(`[data-projectblock="${d.openproject}"]`); if (blk) blk.scrollIntoView({ block: 'start' }); return; }
+  if ('bulkclear' in d) { S.selected.clear(); render(); return; }
+  if ('bulkapply' in d) {
+    const pid = $('bulk-project').value, parentId = $('bulk-parent').value;
+    [...S.selected].forEach(id => {
+      const c = S.t.Cards[id]; if (!c) return;
+      if (parentId) setParent(c, parentId);
+      else if (pid) setProject(c, pid === '-' ? '' : pid);
+    });
+    S.selected.clear(); render(); return;
+  }
   if ('close' in d) { const ov = el.closest('.overlay'); if (ov && ov.dataset.name === 'card') closeCard(); else if (ov) closeOverlay(ov.dataset.name); return; }
   if (el.tagName === 'SUMMARY' && el.parentElement.dataset.project) { S.openProject = el.parentElement.open ? null : el.parentElement.dataset.project; return; }
 
@@ -1061,9 +1325,28 @@ document.addEventListener('submit', e => {
   }
   if ('saveproject' in d) {
     const name = $('p-name').value.trim();
-    if (!name) return;
-    change('Projects', uid('p'), { name, owner_email: $('p-owner').value, target_date: $('p-due').value, status: 'active' });
-    closeOverlay('project'); return;
+    if (!name) { toast(t('projectNameRequired')); return; }
+    const fields = { name, owner_email: $('p-owner').value, target_date: $('p-due').value };
+    if (d.saveproject) {
+      fields.status = $('p-status').value;
+      const p = S.t.Projects[d.saveproject];
+      const diff = {}; Object.keys(fields).forEach(k => { if ((p[k] || '') !== fields[k]) diff[k] = fields[k]; });
+      if (Object.keys(diff).length) change('Projects', d.saveproject, diff);
+    } else {
+      const pid = uid('p');
+      change('Projects', pid, Object.assign(fields, { status: 'active' }));
+      treeOpen().add('p:' + pid); saveTree();
+    }
+    closeOverlay('project'); render(); return;
+  }
+  if (d.treeaddform) {
+    const v = $('tree-add-input').value.trim();
+    $('tree-add-input').value = '';
+    if (!v) return;
+    const key = d.treeaddform;
+    if (key.startsWith('p:')) newCard({ board_id: $('tree-add-board').value, title: v, project_id: key.slice(2) });
+    else { const parent = S.t.Cards[key.slice(2)]; if (parent) newCard({ board_id: parent.board_id, title: v, parent_card_id: parent.card_id, project_id: parent.project_id || '' }); }
+    S.treeAdd = key; render(); setTimeout(() => $('tree-add-input') && $('tree-add-input').focus(), 0); return;
   }
   const c = S.openCard && S.t.Cards[S.openCard];
   if (!c) return;
@@ -1096,6 +1379,12 @@ document.addEventListener('change', e => {
     S.filters[el.dataset.filter] = el.type === 'checkbox' ? el.checked : el.value;
     render(); return;
   }
+  if (el.dataset.treefilter) { S.treeFilter[el.dataset.treefilter] = el.type === 'checkbox' ? el.checked : el.value; render(); return; }
+  if ('boardproject' in el.dataset) { S.boardProject = el.value; render(); return; }
+  if ('boardsubs' in el.dataset) { S.boardSubs = el.checked; render(); return; }
+  if (el.dataset.select) { el.checked ? S.selected.add(el.dataset.select) : S.selected.delete(el.dataset.select); render(); return; }
+  if ('selectall' in el.dataset) { filteredList().forEach(c => el.checked ? S.selected.add(c.card_id) : S.selected.delete(c.card_id)); render(); return; }
+  if (el.dataset.assign) { const c = S.t.Cards[el.dataset.assign]; if (c && el.value) { setProject(c, el.value); treeOpen().add('p:' + el.value); saveTree(); } return; }
   const c = S.openCard && S.t.Cards[S.openCard];
   if (!c) return;
   if (el.dataset.item) { change('Checklist', el.dataset.item, { done: el.checked ? 'yes' : 'no' }); return; }
@@ -1104,6 +1393,8 @@ document.addEventListener('change', e => {
   const field = map[el.id];
   if (!field) return;
   let v = el.value;
+  if (field === 'project_id') { setProject(c, v); return; }
+  if (field === 'parent_card_id') { setParent(c, v); return; }
   if (field === 'title') { v = v.replace(/\s+/g, ' ').trim(); if (!v) { el.value = c.title; toast(errText('title_required')); return; } }
   if (field === 'status' && !isApprover() && (APPROVER_STAGES.includes(v) || APPROVER_STAGES.includes(c.status))) { el.value = c.status; toast(errText('needs_approver')); return; }
   if (v !== (c[field] || '')) change('Cards', c.card_id, { [field]: v });
