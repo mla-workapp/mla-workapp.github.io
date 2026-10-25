@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fa-AF" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLA Workapp · اپلیکیشن زبان مادری</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  /* ------------------------------------------------------------------
+     MLA Workapp — Phase 0 app page
+     Before uploading, paste your two values into CONFIG below.
+     ------------------------------------------------------------------ */
+  :root {
+    --bg: #f5f6f8; --panel: #ffffff; --ink: #1d2433; --muted: #5d6677;
+    --line: #dde1e8; --accent: #1f6f5c; --accent-soft: #e3f1ec;
+    --col: #eceef2; --danger: #b3261e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c; --panel: #1c2027; --ink: #e8ebf0; --muted: #9aa3b2;
+      --line: #2c323c; --accent: #5bbf9f; --accent-soft: #1f3530;
+      --col: #222730; --danger: #f2b8b5;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font-family: 'Vazirmatn', system-ui, sans-serif; font-size: 15px; }
+  header { display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+           background: var(--panel); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 17px; margin: 0; font-weight: 700; }
+  header .spacer { flex: 1; }
+  header .who { color: var(--muted); font-size: 13px; }
+  button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--panel);
+           color: var(--ink); border-radius: 8px; padding: 6px 12px; }
+  button:hover { border-color: var(--accent); }
+  #signin { max-width: 420px; margin: 12vh auto; padding: 32px 24px; text-align: center;
+            background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+  #signin h2 { margin: 0 0 6px; font-size: 22px; }
+  #signin p { color: var(--muted); margin: 0 0 20px; }
+  #gbtn { display: flex; justify-content: center; }
+  .msg { margin-top: 16px; color: var(--danger); font-size: 14px; white-space: pre-line; }
+  #app { display: none; }
+  nav { display: flex; gap: 6px; overflow-x: auto; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  nav button { white-space: nowrap; border-radius: 999px; }
+  nav button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+  nav .lock { font-size: 11px; color: var(--muted); }
+  .board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr);
+           gap: 12px; padding: 16px; overflow-x: auto; min-height: 60vh; }
+  .column { background: var(--col); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .column h3 { margin: 0 4px 4px; font-size: 14px; display: flex; justify-content: space-between; }
+  .column h3 span { color: var(--muted); font-weight: 400; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  .card .t { font-weight: 600; }
+  .card .m { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 16px 0; }
+  footer { color: var(--muted); font-size: 12px; padding: 8px 16px 20px; }
+  [dir="ltr"] body { font-family: system-ui, sans-serif; }
+</style>
+</head>
+<body>
+
+<section id="signin">
+  <h2 id="si-title">اپلیکیشن زبان مادری</h2>
+  <p id="si-sub">با حساب گوگل خود وارد شوید</p>
+  <div id="gbtn"></div>
+  <div class="msg" id="si-msg"></div>
+</section>
+
+<section id="app">
+  <header>
+    <h1 id="app-name">اپلیکیشن زبان مادری</h1>
+    <div class="spacer"></div>
+    <span class="who" id="who"></span>
+    <button id="lang">English</button>
+    <button id="signout">خروج</button>
+  </header>
+  <nav id="boards"></nav>
+  <main class="board" id="board"></main>
+  <footer id="foot"></footer>
+</section>
+
+<script>
+/* ===== Paste your values here (setup guide, Part E) ===== */
+const CONFIG = {
+  CLIENT_ID: '512898480053-vds2p4etd65jo71ejuudaun7ek8vl1b2.apps.googleusercontent.com',      // ends in .apps.googleusercontent.com
+  API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',    // ends in /exec
+};
+/* ======================================================== */
+
+const T = {
+  fa: { signinSub: 'با حساب گوگل خود وارد شوید', signout: 'خروج', other: 'English',
+        empty: 'کارتی نیست', confidential: 'محرم', loading: 'در حال بارگذاری…',
+        owner: 'مسئول', due: 'تاریخ ختم', version: 'نسخه',
+        errors: {
+          not_authorised: 'این حساب در فهرست کاربران اپلیکیشن نیست. از مدیر بخواهید ایمیل شما را اضافه کند.',
+          server_not_configured: 'سرور هنوز تنظیم نشده است (CLIENT_ID یا SHEET_ID).',
+          invalid_token: 'ورود تأیید نشد. دوباره وارد شوید.',
+          token_expired: 'زمان ورود تمام شده است. دوباره وارد شوید.',
+          network: 'اتصال به سرور ممکن نشد. انترنت را بررسی کنید.',
+          config: 'CLIENT_ID یا API_URL در فایل index.html وارد نشده است.' } },
+  en: { signinSub: 'Sign in with your Google account', signout: 'Sign out', other: 'دری',
+        empty: 'No cards', confidential: 'Confidential', loading: 'Loading…',
+        owner: 'Owner', due: 'Due', version: 'Version',
+        errors: {
+          not_authorised: 'This account is not in the app\'s Users list. Ask the admin to add your email.',
+          server_not_configured: 'The server is not set up yet (CLIENT_ID or SHEET_ID).',
+          invalid_token: 'Sign-in could not be verified. Please sign in again.',
+          token_expired: 'Your sign-in has expired. Please sign in again.',
+          network: 'Could not reach the server. Check your internet connection.',
+          config: 'CLIENT_ID or API_URL has not been filled in in index.html.' } },
+};
+
+const state = { idToken: null, data: null, lang: 'fa', board: null };
+
+function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function storeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+function t(key) { return T[state.lang][key]; }
+function errText(code) { return T[state.lang].errors[code] || code; }
+function el(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function setLang(lang) {
+  state.lang = lang === 'en' ? 'en' : 'fa';
+  storeSet('mla_lang', state.lang);
+  document.documentElement.lang = state.lang === 'fa' ? 'fa-AF' : 'en-GB';
+  document.documentElement.dir = state.lang === 'fa' ? 'rtl' : 'ltr';
+  el('si-sub').textContent = t('signinSub');
+  el('signout').textContent = t('signout');
+  el('lang').textContent = t('other');
+  if (state.data) render();
+}
+
+async function api(action, extra) {
+  const res = await fetch(CONFIG.API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
+    body: JSON.stringify(Object.assign({ action, idToken: state.idToken }, extra || {})),
+  });
+  return res.json();
+}
+
+async function onCredential(resp) {
+  state.idToken = resp.credential;
+  el('si-msg').textContent = t('loading');
+  try {
+    const out = await api('bootstrap');
+    if (!out.ok) { el('si-msg').textContent = errText(out.error); return; }
+    state.data = out.data;
+    if (!storeGet('mla_lang') && out.data.user.language) setLang(out.data.user.language);
+    state.board = storeGet('mla_board') || (out.data.boards[0] && out.data.boards[0].board_id);
+    if (!out.data.boards.some(b => b.board_id === state.board) && out.data.boards[0]) state.board = out.data.boards[0].board_id;
+    el('si-msg').textContent = '';
+    el('signin').style.display = 'none';
+    el('app').style.display = 'block';
+    render();
+  } catch (e) {
+    el('si-msg').textContent = errText('network');
+  }
+}
+
+function render() {
+  const d = state.data, fa = state.lang === 'fa';
+  const appName = fa ? (d.app.name_dari || 'اپلیکیشن زبان مادری') : (d.app.name_en || 'MLA Workapp');
+  el('app-name').textContent = appName;
+  document.title = appName;
+  el('who').textContent = (fa ? d.user.name_dari : d.user.name_en) || d.user.email;
+
+  el('boards').innerHTML = d.boards.map(b =>
+    `<button data-b="${esc(b.board_id)}" class="${b.board_id === state.board ? 'on' : ''}">` +
+    `${esc(fa ? b.name_dari : b.name_en)}` +
+    `${b.confidential === 'yes' ? ` <span class="lock">· ${esc(t('confidential'))}</span>` : ''}</button>`
+  ).join('');
+  el('boards').querySelectorAll('button').forEach(btn =>
+    btn.onclick = () => { state.board = btn.dataset.b; storeSet('mla_board', state.board); render(); });
+
+  const cards = d.cards.filter(c => c.board_id === state.board);
+  el('board').innerHTML = d.stages.map(s => {
+    const list = cards.filter(c => c.status === s.id);
+    const body = list.length ? list.map(c =>
+      `<div class="card"><div class="t">${esc(c.title)}</div>` +
+      `<div class="m">${c.owner_email ? esc(t('owner')) + ': ' + esc(c.owner_email) : ''}` +
+      `${c.due_date ? ' · ' + esc(t('due')) + ': ' + esc(c.due_date.slice(0, 10)) : ''}</div></div>`).join('')
+      : `<div class="empty">${esc(t('empty'))}</div>`;
+    return `<div class="column"><h3>${esc(fa ? s.dari : s.en)} <span>${list.length}</span></h3>${body}</div>`;
+  }).join('');
+
+  el('foot').textContent = `${t('version')} ${d.app.version} · ${d.user.email} · ${d.user.role}`;
+}
+
+function signOut() {
+  if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+  state.idToken = null; state.data = null;
+  el('app').style.display = 'none';
+  el('signin').style.display = 'block';
+}
+
+window.onload = () => {
+  setLang(storeGet('mla_lang') || 'fa');
+  el('lang').onclick = () => setLang(state.lang === 'fa' ? 'en' : 'fa');
+  el('signout').onclick = signOut;
+  if (CONFIG.CLIENT_ID.startsWith('PASTE') || CONFIG.API_URL.startsWith('PASTE')) {
+    el('si-msg').textContent = errText('config');
+    return;
+  }
+  initGoogle();
+};
+
+function initGoogle() {
+  // The Google sign-in script loads asynchronously; wait until it is ready.
+  if (!(window.google && google.accounts && google.accounts.id)) return setTimeout(initGoogle, 100);
+  google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: onCredential, auto_select: true });
+  google.accounts.id.renderButton(el('gbtn'), { theme: 'outline', size: 'large', shape: 'pill', locale: 'fa' });
+  google.accounts.id.prompt();
+}
+</script>
+</body>
+</html>
