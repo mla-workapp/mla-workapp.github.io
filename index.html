@@ -2,61 +2,190 @@
 <html lang="fa-AF" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MLA Workapp · اپلیکیشن زبان مادری</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6f5c">
+<title>اپلیکیشن زبان مادری · MLA Workapp</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-  /* ------------------------------------------------------------------
-     MLA Workapp — Phase 0 app page
-     Before uploading, paste your two values into CONFIG below.
-     ------------------------------------------------------------------ */
+:root {
+  --bg: #f4f5f7; --panel: #ffffff; --ink: #1d2433; --muted: #5d6677; --faint: #8a93a3;
+  --line: #dde1e8; --accent: #1f6f5c; --accent-ink: #ffffff; --accent-soft: #e3f1ec;
+  --col: #eceef2; --danger: #b3261e; --danger-soft: #fbe9e7; --warn: #8a5a00; --warn-soft: #fff4d6;
+  --ok: #1e7a46; --shadow: 0 1px 2px rgba(20,30,50,.06), 0 2px 8px rgba(20,30,50,.06);
+  --l-red: #d93f3f; --l-yellow: #d99a00; --l-blue: #2f6fd0; --l-purple: #7a4fc9; --l-green: #2e9d5b; --l-grey: #7a8290;
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #f5f6f8; --panel: #ffffff; --ink: #1d2433; --muted: #5d6677;
-    --line: #dde1e8; --accent: #1f6f5c; --accent-soft: #e3f1ec;
-    --col: #eceef2; --danger: #b3261e;
+    --bg: #14171c; --panel: #1c2027; --ink: #e8ebf0; --muted: #a2abba; --faint: #7d8696;
+    --line: #2c323c; --accent: #5bbf9f; --accent-ink: #0f1a16; --accent-soft: #1f3530;
+    --col: #20252d; --danger: #f2b8b5; --danger-soft: #3a2220; --warn: #f0c46b; --warn-soft: #3a3020;
+    --ok: #7fd3a4; --shadow: 0 1px 2px rgba(0,0,0,.3);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #14171c; --panel: #1c2027; --ink: #e8ebf0; --muted: #9aa3b2;
-      --line: #2c323c; --accent: #5bbf9f; --accent-soft: #1f3530;
-      --col: #222730; --danger: #f2b8b5;
-    }
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-         font-family: 'Vazirmatn', system-ui, sans-serif; font-size: 15px; }
-  header { display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-           background: var(--panel); border-bottom: 1px solid var(--line); }
-  header h1 { font-size: 17px; margin: 0; font-weight: 700; }
-  header .spacer { flex: 1; }
-  header .who { color: var(--muted); font-size: 13px; }
-  button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--panel);
-           color: var(--ink); border-radius: 8px; padding: 6px 12px; }
-  button:hover { border-color: var(--accent); }
-  #signin { max-width: 420px; margin: 12vh auto; padding: 32px 24px; text-align: center;
-            background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
-  #signin h2 { margin: 0 0 6px; font-size: 22px; }
-  #signin p { color: var(--muted); margin: 0 0 20px; }
-  #gbtn { display: flex; justify-content: center; }
-  .msg { margin-top: 16px; color: var(--danger); font-size: 14px; white-space: pre-line; }
-  #app { display: none; }
-  nav { display: flex; gap: 6px; overflow-x: auto; padding: 12px 16px; border-bottom: 1px solid var(--line); }
-  nav button { white-space: nowrap; border-radius: 999px; }
-  nav button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
-  nav .lock { font-size: 11px; color: var(--muted); }
-  .board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr);
-           gap: 12px; padding: 16px; overflow-x: auto; min-height: 60vh; }
-  .column { background: var(--col); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-  .column h3 { margin: 0 4px 4px; font-size: 14px; display: flex; justify-content: space-between; }
-  .column h3 span { color: var(--muted); font-weight: 400; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
-  .card .t { font-weight: 600; }
-  .card .m { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 16px 0; }
-  footer { color: var(--muted); font-size: 12px; padding: 8px 16px 20px; }
-  [dir="ltr"] body { font-family: system-ui, sans-serif; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body { font-family: 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.55; }
+[dir="ltr"] body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 12px; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.ghost { background: transparent; border-color: transparent; }
+button.ghost:hover { background: var(--col); }
+button:disabled { opacity: .5; cursor: default; }
+input, select, textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; width: 100%; }
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+textarea { resize: vertical; min-height: 70px; }
+a { color: var(--accent); }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+
+/* Sign-in */
+#signin { max-width: 420px; margin: 12vh auto 0; padding: 32px 24px; text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+#signin h2 { margin: 0 0 6px; font-size: 22px; }
+#signin p { color: var(--muted); margin: 0 0 20px; }
+.gbtn { display: flex; justify-content: center; min-height: 44px; }
+.msg { margin-top: 16px; color: var(--danger); font-size: 14px; white-space: pre-line; }
+
+/* Header */
+header.top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+header.top h1 { font-size: 17px; margin: 0; font-weight: 700; white-space: nowrap; }
+.views { display: flex; gap: 4px; }
+.views button { border-color: transparent; background: transparent; }
+.views button.on { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+.spacer { flex: 1; }
+#search { width: 220px; max-width: 40vw; }
+.sync { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; background: var(--panel); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+.sync.online .dot { background: var(--ok); }
+.sync.pending .dot { background: var(--l-yellow); }
+.sync.error .dot, .sync.signin .dot { background: var(--danger); }
+.who { color: var(--muted); font-size: 13px; }
+
+/* Board chips */
+nav.boards { display: flex; gap: 6px; overflow-x: auto; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+nav.boards button { white-space: nowrap; border-radius: 999px; }
+nav.boards button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.lock { font-size: 11px; color: var(--muted); }
+
+main { padding: 12px 16px 40px; }
+
+/* Reference strip */
+.refs { margin-bottom: 12px; }
+.refs summary { cursor: pointer; color: var(--muted); font-size: 14px; padding: 4px 0; }
+.refs .row { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 6px; }
+.refs .row button { font-size: 13px; }
+
+/* Kanban */
+.kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 8px; align-items: start; }
+.column { background: var(--col); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 160px; }
+.column.drop { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.column h3 { margin: 2px 4px 2px; font-size: 14px; display: flex; justify-content: space-between; gap: 8px; }
+.column h3 .n { color: var(--muted); font-weight: 400; }
+.column h3 .lockicon { font-size: 11px; color: var(--muted); font-weight: 400; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; box-shadow: var(--shadow); cursor: pointer; text-align: start; width: 100%; display: block; }
+.card:hover { border-color: var(--accent); }
+.card .t { font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+.card .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; font-size: 12px; color: var(--muted); }
+.labels { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 5px; }
+.lbl { display: inline-block; height: 6px; width: 28px; border-radius: 3px; }
+.lbl.red { background: var(--l-red); } .lbl.yellow { background: var(--l-yellow); } .lbl.blue { background: var(--l-blue); }
+.lbl.purple { background: var(--l-purple); } .lbl.green { background: var(--l-green); } .lbl.grey { background: var(--l-grey); }
+.badge { display: inline-flex; align-items: center; gap: 3px; padding: 0 6px; border-radius: 6px; background: var(--col); color: var(--muted); font-size: 12px; line-height: 20px; white-space: nowrap; }
+.badge.overdue { background: var(--danger-soft); color: var(--danger); font-weight: 600; }
+.badge.soon { background: var(--warn-soft); color: var(--warn); }
+.badge.done { background: var(--accent-soft); color: var(--ok); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.avatar { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--ink); font-size: 11px; font-weight: 700; }
+.add { background: transparent; border: 1px dashed var(--line); color: var(--muted); text-align: start; }
+.quick { display: flex; gap: 6px; }
+.quick input { flex: 1; }
+
+/* Lists */
+.group { margin-bottom: 22px; }
+.group h2 { font-size: 15px; margin: 0 0 8px; display: flex; gap: 8px; align-items: baseline; }
+.group h2 .n { color: var(--muted); font-weight: 400; font-size: 13px; }
+.stack { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.empty { color: var(--muted); font-size: 13px; text-align: center; padding: 14px 0; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.filters select, .filters label { width: auto; }
+.filters label { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
+.filters input[type=checkbox] { width: auto; }
+table.list { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+table.list th, table.list td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: start; font-size: 14px; vertical-align: top; }
+table.list th { background: var(--col); font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap; }
+table.list tr:hover td { background: var(--accent-soft); cursor: pointer; }
+.tablewrap { overflow-x: auto; }
+
+/* Calendar */
+.calhead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.calhead h2 { margin: 0; font-size: 17px; min-width: 160px; text-align: center; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal .dow { font-size: 12px; color: var(--muted); text-align: center; padding: 4px 0; }
+.cal .day { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; min-height: 96px; padding: 4px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+.cal .day.out { opacity: .45; }
+.cal .day.today { border-color: var(--accent); border-width: 2px; }
+.cal .num { font-size: 12px; color: var(--muted); }
+.cal .ev { font-size: 12px; border: 0; border-radius: 5px; background: var(--accent-soft); padding: 1px 5px; text-align: start; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal .ev.overdue { background: var(--danger-soft); color: var(--danger); }
+
+/* Projects */
+.proj { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+.proj summary { cursor: pointer; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-weight: 600; }
+.bar { height: 6px; background: var(--col); border-radius: 3px; overflow: hidden; width: 140px; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+
+/* Dialog */
+.overlay { position: fixed; inset: 0; background: rgba(10,15,25,.45); z-index: 50; display: flex; align-items: flex-start; justify-content: center; padding: 4vh 12px; overflow-y: auto; }
+.dialog { background: var(--panel); border-radius: 14px; width: min(860px, 100%); box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+.dialog.small { width: min(440px, 100%); }
+.dhead { display: flex; gap: 10px; align-items: flex-start; padding: 16px 18px 8px; }
+.dhead textarea { font-size: 18px; font-weight: 700; min-height: 0; border-color: transparent; padding: 4px 6px; resize: none; overflow: hidden; }
+.dhead textarea:hover { border-color: var(--line); }
+.dbody { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 18px; padding: 6px 18px 18px; }
+.side { display: flex; flex-direction: column; gap: 10px; }
+.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+.sec { margin-bottom: 18px; }
+.sec h4 { margin: 0 0 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+.desc { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--col); border-radius: 8px; padding: 10px; min-height: 44px; font-size: 14px; cursor: text; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border-radius: 999px; padding: 3px 10px; font-size: 13px; }
+.chip.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.chip .sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-inline-end: 5px; vertical-align: -1px; }
+.check { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; }
+.check input[type=checkbox] { width: 18px; height: 18px; margin-top: 3px; flex: none; }
+.check .txt { flex: 1; overflow-wrap: anywhere; }
+.check.done .txt { text-decoration: line-through; color: var(--muted); }
+.check button { padding: 0 6px; }
+.comment { border-top: 1px solid var(--line); padding: 8px 0; font-size: 14px; }
+.comment .by { font-size: 12px; color: var(--muted); }
+.comment .body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 18px 16px; border-top: 1px solid var(--line); }
+.notice { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-bottom: 12px; }
+.event { font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+
+/* Toast */
+#toasts { position: fixed; bottom: 16px; inset-inline-start: 16px; z-index: 60; display: flex; flex-direction: column; gap: 8px; max-width: min(420px, calc(100vw - 32px)); }
+.toast { background: var(--ink); color: var(--bg); border-radius: 10px; padding: 10px 14px; font-size: 14px; box-shadow: var(--shadow); }
+
+@media (max-width: 760px) {
+  header.top { gap: 8px; }
+  #search { width: 100%; max-width: none; order: 10; }
+  .views { order: 11; width: 100%; overflow-x: auto; }
+  .who { display: none; }
+  .dbody { grid-template-columns: 1fr; }
+  .overlay { padding: 0; }
+  .dialog { border-radius: 0; min-height: 100vh; }
+  .cal .day { min-height: 70px; }
+  .cal .ev { font-size: 11px; }
+  .kanban { grid-auto-columns: minmax(240px, 82vw); }
+}
 </style>
 </head>
 <body>
@@ -64,157 +193,998 @@
 <section id="signin">
   <h2 id="si-title">اپلیکیشن زبان مادری</h2>
   <p id="si-sub">با حساب گوگل خود وارد شوید</p>
-  <div id="gbtn"></div>
+  <div class="gbtn" id="gbtn"></div>
   <div class="msg" id="si-msg"></div>
 </section>
 
-<section id="app">
-  <header>
+<section id="app" class="hidden">
+  <header class="top">
     <h1 id="app-name">اپلیکیشن زبان مادری</h1>
+    <div class="views" id="views"></div>
     <div class="spacer"></div>
+    <input id="search" type="search" autocomplete="off">
+    <button class="sync" id="sync"><span class="dot"></span><span id="sync-text"></span></button>
     <span class="who" id="who"></span>
-    <button id="lang">English</button>
-    <button id="signout">خروج</button>
+    <button id="lang"></button>
+    <button id="signout"></button>
   </header>
-  <nav id="boards"></nav>
-  <main class="board" id="board"></main>
-  <footer id="foot"></footer>
+  <nav class="boards" id="boards"></nav>
+  <main id="main"></main>
 </section>
 
+<div id="overlay-root"></div>
+<div id="toasts" aria-live="polite"></div>
+
 <script>
-/* ===== Paste your values here (setup guide, Part E) ===== */
+/* ===== Your settings (already filled in) ===== */
 const CONFIG = {
-  CLIENT_ID: '512898480053-vds2p4etd65jo71ejuudaun7ek8vl1b2.apps.googleusercontent.com',      // ends in .apps.googleusercontent.com
-  API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',    // ends in /exec
+  CLIENT_ID: '512898480053-vds2p4etd65jo71ejuudaun7ek8vl1b2.apps.googleusercontent.com',
+  API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',
 };
-/* ======================================================== */
+/* ============================================= */
+const APP_VERSION = '0.2.0';
+const SYNC_EVERY_MS = 3 * 60 * 1000;
 
+/* ------------------------------------------------------------------ */
+/* Text                                                                */
+/* ------------------------------------------------------------------ */
 const T = {
-  fa: { signinSub: 'با حساب گوگل خود وارد شوید', signout: 'خروج', other: 'English',
-        empty: 'کارتی نیست', confidential: 'محرم', loading: 'در حال بارگذاری…',
-        owner: 'مسئول', due: 'تاریخ ختم', version: 'نسخه',
-        errors: {
-          not_authorised: 'این حساب در فهرست کاربران اپلیکیشن نیست. از مدیر بخواهید ایمیل شما را اضافه کند.',
-          server_not_configured: 'سرور هنوز تنظیم نشده است (CLIENT_ID یا SHEET_ID).',
-          invalid_token: 'ورود تأیید نشد. دوباره وارد شوید.',
-          token_expired: 'زمان ورود تمام شده است. دوباره وارد شوید.',
-          network: 'اتصال به سرور ممکن نشد. انترنت را بررسی کنید.',
-          config: 'CLIENT_ID یا API_URL در فایل index.html وارد نشده است.' } },
-  en: { signinSub: 'Sign in with your Google account', signout: 'Sign out', other: 'دری',
-        empty: 'No cards', confidential: 'Confidential', loading: 'Loading…',
-        owner: 'Owner', due: 'Due', version: 'Version',
-        errors: {
-          not_authorised: 'This account is not in the app\'s Users list. Ask the admin to add your email.',
-          server_not_configured: 'The server is not set up yet (CLIENT_ID or SHEET_ID).',
-          invalid_token: 'Sign-in could not be verified. Please sign in again.',
-          token_expired: 'Your sign-in has expired. Please sign in again.',
-          network: 'Could not reach the server. Check your internet connection.',
-          config: 'CLIENT_ID or API_URL has not been filled in in index.html.' } },
+  fa: {
+    signinSub: 'با حساب گوگل خود وارد شوید', signout: 'خروج', other: 'English', search: 'جستجو در کارت‌ها…',
+    v_board: 'بورد', v_mine: 'کارهای من', v_list: 'فهرست', v_calendar: 'تقویم', v_projects: 'پروژه‌ها',
+    s_online: 'همگام', s_offline: 'آفلاین', s_pending: 'در انتظار ارسال', s_syncing: 'در حال همگام‌سازی…', s_error: 'خطا در همگام‌سازی', s_signin: 'برای همگام‌سازی وارد شوید',
+    empty: 'کارتی نیست', addCard: '+ کارت جدید', add: 'افزودن', cancel: 'لغو', save: 'ذخیره', close: 'بستن', edit: 'ویرایش',
+    reference: 'مرجع و قواعد تیم', confidential: 'محرم', approverOnly: 'فقط تأییدکننده',
+    title: 'عنوان', board: 'بورد', status: 'مرحله', type: 'نوع', priority: 'اولویت', owner: 'مسئول', members: 'همکاران',
+    start: 'تاریخ آغاز', due: 'تاریخ ختم', labels: 'برچسب‌ها', project: 'پروژه', parent: 'کارت اصلی', recurrence: 'تکرار',
+    link: 'لینک گوگل درایو', open: 'باز کردن', description: 'توضیحات', noDescription: 'برای افزودن توضیحات کلیک کنید', checklist: 'چک‌لیست',
+    addItem: 'افزودن مورد…', comments: 'نظرها', writeComment: 'نظر خود را بنویسید…', send: 'فرستادن', history: 'تاریخچهٔ تغییرات', showHistory: 'نمایش تاریخچه',
+    subtasks: 'کارهای فرعی', addSubtask: 'افزودن کار فرعی…', none: '—', noOwner: 'بدون مسئول', created: 'ایجاد شد', by: 'توسط',
+    whatsapp: 'فرستادن در واتس‌اپ', hide: 'حذف کارت', hideConfirm: 'برای حذف دوباره کلیک کنید', copyLink: 'کاپی لینک کارت', copied: 'لینک کاپی شد',
+    overdue: 'گذشته از موعد', thisWeek: 'این هفته', later: 'بعداً', noDate: 'بدون تاریخ', awaitingMe: 'منتظر تأیید شما', myCards: 'کارهای من',
+    allBoards: 'همه بوردها', allStages: 'همه مراحل', allOwners: 'همه مسئولان', allLabels: 'همه برچسب‌ها', onlyOverdue: 'فقط گذشته از موعد', showDone: 'نمایش تکمیل‌شده',
+    newProject: '+ پروژهٔ جدید', projectName: 'نام پروژه', noProject: 'بدون پروژه', progress: 'پیشرفت', cards: 'کارت',
+    readOnly: 'شما اجازهٔ تغییر ندارید (فقط خواندن).', offlineHistory: 'تاریخچه فقط وقتی آنلاین هستید نمایش داده می‌شود.',
+    today: 'امروز', prev: 'قبلی', next: 'بعدی', signinToSync: 'برای همگام‌سازی دوباره وارد شوید',
+    fromTrello: 'از ترلو', loading: 'در حال بارگذاری…', saved: 'ذخیره شد',
+    types: { Task: 'کار', Request: 'درخواست', Meeting: 'جلسه', Idea: 'ایده', Reference: 'مرجع' },
+    priorities: { '': '—', urgent: 'فوری', high: 'بلند', medium: 'متوسط', low: 'پایین' },
+    recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار' },
+    dows: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'],
+    months: ['جنوری', 'فبروری', 'مارچ', 'اپریل', 'می', 'جون', 'جولای', 'اگست', 'سپتامبر', 'اکتوبر', 'نومبر', 'دسامبر'],
+    errors: {
+      not_authorised: 'این حساب در فهرست کاربران اپلیکیشن نیست. از مدیر بخواهید ایمیل شما را اضافه کند.',
+      server_not_configured: 'سرور هنوز تنظیم نشده است.', invalid_token: 'ورود تأیید نشد. دوباره وارد شوید.', token_expired: 'زمان ورود تمام شده است.',
+      network: 'اتصال به سرور ممکن نشد.', needs_approver: 'فقط تأییدکننده یا مدیر می‌تواند کارت را به «تکمیل‌شده» یا «بایگانی» ببرد یا از آن بیرون کند.',
+      no_access: 'به این بورد دسترسی ندارید.', read_only: 'حساب شما فقط خواندنی است.', title_required: 'عنوان کارت لازم است.',
+      not_your_comment: 'فقط نویسندهٔ نظر می‌تواند آن را تغییر دهد.', admin_only: 'این کار فقط برای مدیر است.', bad_date: 'تاریخ درست نیست.',
+      conflict: 'این کارت همزمان توسط شخص دیگری هم تغییر کرده بود؛ تغییر شما نگه داشته شد و مورد قبلی در جدول Conflicts ثبت شد.' } },
+  en: {
+    signinSub: 'Sign in with your Google account', signout: 'Sign out', other: 'دری', search: 'Search cards…',
+    v_board: 'Board', v_mine: 'My work', v_list: 'List', v_calendar: 'Calendar', v_projects: 'Projects',
+    s_online: 'Synced', s_offline: 'Offline', s_pending: 'waiting to send', s_syncing: 'Syncing…', s_error: 'Sync error', s_signin: 'Sign in to sync',
+    empty: 'No cards', addCard: '+ Add card', add: 'Add', cancel: 'Cancel', save: 'Save', close: 'Close', edit: 'Edit',
+    reference: 'Reference & team rules', confidential: 'Confidential', approverOnly: 'Approver only',
+    title: 'Title', board: 'Board', status: 'Stage', type: 'Type', priority: 'Priority', owner: 'Owner', members: 'Helpers',
+    start: 'Start date', due: 'Due date', labels: 'Labels', project: 'Project', parent: 'Parent card', recurrence: 'Repeat',
+    link: 'Google Drive link', open: 'Open', description: 'Description', noDescription: 'Click to add a description', checklist: 'Checklist',
+    addItem: 'Add an item…', comments: 'Comments', writeComment: 'Write a comment…', send: 'Send', history: 'History', showHistory: 'Show history',
+    subtasks: 'Sub-tasks', addSubtask: 'Add a sub-task…', none: '—', noOwner: 'No owner', created: 'Created', by: 'by',
+    whatsapp: 'Share on WhatsApp', hide: 'Delete card', hideConfirm: 'Click again to delete', copyLink: 'Copy card link', copied: 'Link copied',
+    overdue: 'Overdue', thisWeek: 'This week', later: 'Later', noDate: 'No date', awaitingMe: 'Awaiting your approval', myCards: 'My cards',
+    allBoards: 'All boards', allStages: 'All stages', allOwners: 'All owners', allLabels: 'All labels', onlyOverdue: 'Overdue only', showDone: 'Show completed',
+    newProject: '+ New project', projectName: 'Project name', noProject: 'No project', progress: 'Progress', cards: 'cards',
+    readOnly: 'You can view but not change this.', offlineHistory: 'History is only shown when you are online.',
+    today: 'Today', prev: 'Previous', next: 'Next', signinToSync: 'Sign in again to sync',
+    fromTrello: 'From Trello', loading: 'Loading…', saved: 'Saved',
+    types: { Task: 'Task', Request: 'Request', Meeting: 'Meeting', Idea: 'Idea', Reference: 'Reference' },
+    priorities: { '': '—', urgent: 'Urgent', high: 'High', medium: 'Medium', low: 'Low' },
+    recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly' },
+    dows: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    errors: {
+      not_authorised: "This account is not in the app's Users list. Ask the admin to add your email.",
+      server_not_configured: 'The server is not set up yet.', invalid_token: 'Sign-in could not be verified. Please sign in again.', token_expired: 'Your sign-in has expired.',
+      network: 'Could not reach the server.', needs_approver: 'Only an approver or admin can move a card into or out of Completed or Archive.',
+      no_access: "You don't have access to that board.", read_only: 'Your account is read-only.', title_required: 'A card needs a title.',
+      not_your_comment: 'Only the author can change a comment.', admin_only: 'Only the admin can do this.', bad_date: 'That date is not valid.',
+      conflict: 'Someone else changed this card at the same time. Your change was kept and the other one was saved in the Conflicts tab.' } },
+};
+const LABEL_COLORS = { urgent: 'red', high: 'yellow', external: 'blue', management: 'purple', budget: 'green', confidential: 'grey' };
+const TABLES = ['Boards', 'Users', 'Projects', 'Cards', 'Checklist', 'Comments'];
+const ID_FIELD = { Users: 'email', Boards: 'board_id', Projects: 'project_id', Cards: 'card_id', Checklist: 'item_id', Comments: 'comment_id' };
+const DEFAULT_STAGES = [
+  { id: 'new', dari: 'درخواست‌های جدید', en: 'New requests' }, { id: 'planned', dari: 'برنامه‌ریزی‌شده', en: 'Planned' },
+  { id: 'in_progress', dari: 'در حال اجرا', en: 'In progress' }, { id: 'approval', dari: 'منتظر تأیید', en: 'Awaiting approval' },
+  { id: 'completed', dari: 'تکمیل‌شده', en: 'Completed' }, { id: 'archive', dari: 'بایگانی', en: 'Archive' },
+];
+const APPROVER_STAGES = ['completed', 'archive'];
+
+/* ------------------------------------------------------------------ */
+/* State                                                               */
+/* ------------------------------------------------------------------ */
+const S = {
+  lang: 'fa', meta: null, since: '', email: '',
+  t: { Boards: {}, Users: {}, Projects: {}, Cards: {}, Checklist: {}, Comments: {} },
+  outbox: [], deviceId: '',
+  idToken: null, tokenExp: 0, syncing: false, syncError: '', needSignin: false, lastSync: 0,
+  view: 'board', board: '', search: '', filters: { board: '', status: '', owner: '', label: '', overdue: false, done: false },
+  sort: { key: 'due_date', dir: 1 }, calMonth: null, openCard: null, quickAdd: null,
 };
 
-const state = { idToken: null, data: null, lang: 'fa', board: null };
+/* ------------------------------------------------------------------ */
+/* Local storage (IndexedDB, falls back to memory)                      */
+/* ------------------------------------------------------------------ */
+const Store = {
+  db: null, mem: {},
+  open() {
+    return new Promise(resolve => {
+      try {
+        const req = indexedDB.open('mla-workapp', 1);
+        req.onupgradeneeded = () => req.result.createObjectStore('kv');
+        req.onsuccess = () => { this.db = req.result; resolve(); };
+        req.onerror = () => resolve();
+      } catch (e) { resolve(); }
+    });
+  },
+  get(key) {
+    if (!this.db) return Promise.resolve(this.mem[key]);
+    return new Promise(resolve => {
+      try {
+        const r = this.db.transaction('kv').objectStore('kv').get(key);
+        r.onsuccess = () => resolve(r.result); r.onerror = () => resolve(undefined);
+      } catch (e) { resolve(undefined); }
+    });
+  },
+  set(key, value) {
+    if (!this.db) { this.mem[key] = value; return Promise.resolve(); }
+    return new Promise(resolve => {
+      try {
+        const tx = this.db.transaction('kv', 'readwrite');
+        tx.objectStore('kv').put(value, key);
+        tx.oncomplete = () => resolve(); tx.onerror = () => resolve();
+      } catch (e) { resolve(); }
+    });
+  },
+  clear() {
+    this.mem = {};
+    if (!this.db) return Promise.resolve();
+    return new Promise(resolve => {
+      try {
+        const tx = this.db.transaction('kv', 'readwrite');
+        tx.objectStore('kv').clear();
+        tx.oncomplete = () => resolve(); tx.onerror = () => resolve();
+      } catch (e) { resolve(); }
+    });
+  },
+};
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
-function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-function storeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-
-function t(key) { return T[state.lang][key]; }
-function errText(code) { return T[state.lang].errors[code] || code; }
-function el(id) { return document.getElementById(id); }
-function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function setLang(lang) {
-  state.lang = lang === 'en' ? 'en' : 'fa';
-  storeSet('mla_lang', state.lang);
-  document.documentElement.lang = state.lang === 'fa' ? 'fa-AF' : 'en-GB';
-  document.documentElement.dir = state.lang === 'fa' ? 'rtl' : 'ltr';
-  el('si-sub').textContent = t('signinSub');
-  el('signout').textContent = t('signout');
-  el('lang').textContent = t('other');
-  if (state.data) render();
+let persistTimer = null;
+function persist() {
+  clearTimeout(persistTimer);
+  persistTimer = setTimeout(persistNow, 300);
+}
+async function persistNow() {
+  clearTimeout(persistTimer);
+  {
+    // Confidential boards (Finance, HR) are never kept on the device.
+    const secret = new Set(Object.values(S.t.Boards).filter(b => isYes(b.confidential)).map(b => b.board_id));
+    const secretCards = new Set(Object.values(S.t.Cards).filter(c => secret.has(c.board_id)).map(c => c.card_id));
+    const keep = {};
+    TABLES.forEach(name => {
+      keep[name] = {};
+      Object.entries(S.t[name]).forEach(([id, r]) => {
+        if (name === 'Boards' && secret.has(id)) return;
+        if (name === 'Cards' && secretCards.has(id)) return;
+        if ((name === 'Checklist' || name === 'Comments') && secretCards.has(r.card_id)) return;
+        keep[name][id] = r;
+      });
+    });
+    await Store.set('outbox', S.outbox);
+    await Store.set('data', { email: S.email, meta: S.meta, since: secret.size ? '' : S.since, tables: keep });
+  }
 }
 
-async function api(action, extra) {
-  const res = await fetch(CONFIG.API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
-    body: JSON.stringify(Object.assign({ action, idToken: state.idToken }, extra || {})),
-  });
-  return res.json();
+/* ------------------------------------------------------------------ */
+/* Helpers                                                             */
+/* ------------------------------------------------------------------ */
+const $ = id => document.getElementById(id);
+const t = k => T[S.lang][k];
+const isYes = v => String(v || '').trim().toLowerCase() === 'yes';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = p => p + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const todayStr = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const addDays = (s, n) => { const d = new Date(s + 'T12:00:00'); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const errText = code => T[S.lang].errors[code] || code;
+const stages = () => (S.meta && S.meta.stages) || DEFAULT_STAGES;
+const stageName = id => { const s = stages().find(x => x.id === id); return s ? (S.lang === 'fa' ? s.dari : s.en) : id; };
+const me = () => (S.meta && S.meta.user) || { role: 'viewer', email: S.email };
+const isApprover = () => ['admin', 'approver'].includes(me().role);
+const canEdit = () => me().role !== 'viewer';
+const boardName = b => b ? (S.lang === 'fa' ? (b.name_dari || b.name_en) : (b.name_en || b.name_dari)) : '';
+const boardsList = () => Object.values(S.t.Boards).filter(b => !isYes(b.archived)).sort((a, b) => Number(a.sort) - Number(b.sort));
+const activeUsers = () => Object.values(S.t.Users).filter(u => isYes(u.active)).sort((a, b) => userName(a.email).localeCompare(userName(b.email)));
+function userName(email) {
+  if (!email) return '';
+  const u = S.t.Users[String(email).toLowerCase()];
+  if (u) return (S.lang === 'fa' ? (u.name_dari || u.name_en) : (u.name_en || u.name_dari)) || email;
+  return String(email).replace(/^Trello: /, '');
+}
+const initials = email => { const n = userName(email).trim(); return n ? n.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase() : '?'; };
+const cards = () => Object.values(S.t.Cards).filter(c => !isYes(c.archived));
+const isDone = c => c.status === 'completed' || c.status === 'archive';
+function dueClass(c) {
+  if (!c.due_date || isDone(c)) return c.due_date && isDone(c) ? 'done' : '';
+  const today = todayStr();
+  if (c.due_date < today) return 'overdue';
+  if (c.due_date <= addDays(today, 7)) return 'soon';
+  return '';
+}
+function matchesSearch(c) {
+  if (!S.search) return true;
+  const q = S.search.toLowerCase();
+  return (c.title + ' ' + c.description + ' ' + userName(c.owner_email)).toLowerCase().includes(q);
+}
+function linkify(text) {
+  let h = esc(text).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  h = h.replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">${u.length > 60 ? u.slice(0, 57) + '…' : u}</a>`);
+  return h;
+}
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast'; el.textContent = msg;
+  $('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 5000);
+}
+function fmtDate(s) {
+  if (!s) return '';
+  const d = s.slice(0, 10).split('-').map(Number);
+  return `${d[2]} ${T[S.lang].months[d[1] - 1].slice(0, S.lang === 'fa' ? 10 : 3)}`;
+}
+function fmtTime(iso) {
+  if (!iso) return '';
+  try { return new Date(iso).toLocaleString(S.lang === 'fa' ? 'fa-AF-u-nu-latn' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' }); }
+  catch (e) { return iso.slice(0, 16).replace('T', ' '); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Changes: apply locally, queue for the server                         */
+/* ------------------------------------------------------------------ */
+function change(table, id, fields) {
+  if (!canEdit()) { toast(t('readOnly')); return; }
+  const cur = S.t[table][id];
+  const base = {};
+  if (cur) Object.keys(fields).forEach(f => { base[f] = cur[f] == null ? '' : String(cur[f]); });
+  const row = Object.assign({}, cur || { [ID_FIELD[table]]: id, archived: 'no', created_at: new Date().toISOString(), created_by: S.email, version: '0' }, fields);
+  row.updated_at = new Date().toISOString();
+  row.updated_by = S.email;
+  if (table === 'Checklist' && 'done' in fields) { row.done_by = isYes(fields.done) ? S.email : ''; row.done_at = isYes(fields.done) ? row.updated_at : ''; }
+  if (table === 'Comments' && !cur) row.author_email = S.email;
+  S.t[table][id] = row;
+  S.outbox.push({ opId: uid('o'), table, id, fields, base: cur ? base : undefined, at: Date.now() });
+  Store.set('outbox', S.outbox);
+  persist();
+  render();
+  scheduleSync(1200);
+}
+
+function newCard(fields) {
+  const id = uid('c');
+  change('Cards', id, Object.assign({ type: 'Task', status: 'new', owner_email: S.email, priority: '' }, fields));
+  return id;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sign-in                                                             */
+/* ------------------------------------------------------------------ */
+let tokenWaiters = [];
+function decodeJwt(tok) {
+  try { return JSON.parse(decodeURIComponent(escape(atob(tok.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))))); }
+  catch (e) { return {}; }
+}
+function gsiReady() { return !!(window.google && google.accounts && google.accounts.id); }
+
+function initGoogle() {
+  if (!gsiReady()) { setTimeout(initGoogle, 150); return; }
+  google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: onCredential, auto_select: true, cancel_on_tap_outside: false });
+  google.accounts.id.renderButton($('gbtn'), { theme: 'outline', size: 'large', shape: 'pill', locale: S.lang === 'fa' ? 'fa' : 'en' });
+  google.accounts.id.prompt();
 }
 
 async function onCredential(resp) {
-  state.idToken = resp.credential;
-  el('si-msg').textContent = t('loading');
-  try {
-    const out = await api('bootstrap');
-    if (!out.ok) { el('si-msg').textContent = errText(out.error); return; }
-    state.data = out.data;
-    if (!storeGet('mla_lang') && out.data.user.language) setLang(out.data.user.language);
-    state.board = storeGet('mla_board') || (out.data.boards[0] && out.data.boards[0].board_id);
-    if (!out.data.boards.some(b => b.board_id === state.board) && out.data.boards[0]) state.board = out.data.boards[0].board_id;
-    el('si-msg').textContent = '';
-    el('signin').style.display = 'none';
-    el('app').style.display = 'block';
-    render();
-  } catch (e) {
-    el('si-msg').textContent = errText('network');
+  const tok = resp.credential;
+  const info = decodeJwt(tok);
+  const email = String(info.email || '').toLowerCase();
+  S.idToken = tok;
+  S.tokenExp = Number(info.exp || 0) * 1000;
+  S.needSignin = false;
+  closeOverlay('signin');
+  tokenWaiters.splice(0).forEach(f => f(tok));
+  if (S.email && email && email !== S.email) {
+    // A different person signed in on this device: start clean.
+    await Store.clear();
+    resetData();
   }
+  if (!S.email) {
+    S.email = email;
+    $('si-msg').style.color = 'var(--muted)';
+    $('si-msg').textContent = t('loading');
+  }
+  sync(true);
+}
+
+function getToken() {
+  if (S.idToken && S.tokenExp - Date.now() > 60000) return Promise.resolve(S.idToken);
+  S.idToken = null;
+  if (!gsiReady()) return Promise.resolve(null);
+  return new Promise(resolve => {
+    tokenWaiters.push(resolve);
+    try { google.accounts.id.prompt(n => { if (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()) done(); }); } catch (e) { done(); }
+    const timer = setTimeout(done, 9000);
+    function done() {
+      clearTimeout(timer);
+      const i = tokenWaiters.indexOf(resolve);
+      if (i >= 0) { tokenWaiters.splice(i, 1); resolve(null); }
+    }
+  });
+}
+
+function showSigninDialog() {
+  if (!gsiReady()) { toast(errText('network')); return; }
+  openOverlay('signin', `<div class="dialog small"><div class="dhead"><b>${esc(t('signinToSync'))}</b></div>
+    <div style="padding:8px 18px 22px"><div class="gbtn" id="gbtn2"></div></div>
+    <div class="actions"><button data-close>${esc(t('close'))}</button></div></div>`);
+  google.accounts.id.renderButton($('gbtn2'), { theme: 'outline', size: 'large', shape: 'pill', locale: S.lang === 'fa' ? 'fa' : 'en' });
+}
+
+async function signOut() {
+  if (gsiReady()) google.accounts.id.disableAutoSelect();
+  await Store.clear();
+  location.hash = '';
+  location.reload();
+}
+
+function resetData() {
+  S.meta = null; S.since = ''; S.email = '';
+  TABLES.forEach(n => { S.t[n] = {}; });
+  S.outbox = [];
+}
+
+/* ------------------------------------------------------------------ */
+/* Sync with the backend                                                */
+/* ------------------------------------------------------------------ */
+let syncTimer = null;
+function scheduleSync(ms) { clearTimeout(syncTimer); syncTimer = setTimeout(() => sync(), ms); }
+
+async function api(body) {
+  const res = await fetch(CONFIG.API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body),
+  });
+  const text = await res.text();
+  try { return JSON.parse(text); } catch (e) { throw new Error('bad_response'); }
+}
+
+async function sync(force) {
+  if (S.syncing) { if (force) scheduleSync(1500); return; }
+  if (!navigator.onLine) { renderSync(); return; }
+  const tok = await getToken();
+  if (!tok) {
+    S.needSignin = !!S.meta;
+    renderSync();
+    if (!S.meta) { $('si-msg').textContent = ''; }
+    return;
+  }
+  S.syncing = true; renderSync();
+  const batch = S.outbox.slice(0, 200);
+  try {
+    let out;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try { out = await api({ action: 'sync', idToken: tok, deviceId: S.deviceId, since: S.since, ops: batch.map(({ opId, table, id, fields, base }) => ({ opId, table, id, fields, base })) }); break; }
+      catch (e) { if (attempt === 2) throw e; await new Promise(r => setTimeout(r, 1500 * (attempt + 1))); }
+    }
+    if (!out.ok) {
+      S.syncError = out.error;
+      if (['invalid_token', 'token_expired', 'not_signed_in'].includes(out.error)) { S.idToken = null; S.needSignin = true; }
+      if (!S.meta) { $('si-msg').style.color = ''; $('si-msg').textContent = errText(out.error); }
+      return;
+    }
+    S.syncError = '';
+    const sent = new Set(batch.map(o => o.opId));
+    S.outbox = S.outbox.filter(o => !sent.has(o.opId));
+    (out.rejected || []).forEach(r => {
+      toast(errText(r.error));
+      const op = batch.find(o => o.opId === r.opId);
+      const back = op && (out.changes[op.table] || []).some(row => row[ID_FIELD[op.table]] === op.id);
+      if (op && !op.base && !back) delete S.t[op.table][op.id];
+    });
+    if ((out.conflicts || []).length) toast(errText('conflict'));
+    if (out.meta) { S.meta = out.meta; S.email = out.meta.user.email; }
+    const changed = merge(out.changes || {}) || batch.length || out.meta;
+    S.since = out.serverTime;
+    S.lastSync = Date.now();
+    persist();
+    showApp();
+    if (changed) render();
+    if (!S.openCard) openFromHash();
+    if (S.outbox.length) scheduleSync(800);
+  } catch (e) {
+    S.syncError = 'network';
+    if (!S.meta) { $('si-msg').style.color = ''; $('si-msg').textContent = errText('network') + '\n' + (e.message || ''); }
+    console.error('sync failed', e);
+  } finally {
+    S.syncing = false;
+    renderSync();
+  }
+}
+
+function merge(changes) {
+  let n = 0;
+  const pending = {};
+  S.outbox.forEach(o => { const k = o.table + ':' + o.id; pending[k] = Object.assign(pending[k] || {}, o.fields); });
+  TABLES.forEach(name => {
+    (changes[name] || []).forEach(row => {
+      const id = row[ID_FIELD[name]];
+      n++;
+      if (isYes(row.archived)) { delete S.t[name][id]; return; }
+      S.t[name][id] = Object.assign(row, pending[name + ':' + id] || {});
+    });
+  });
+  return n;
+}
+
+/* ------------------------------------------------------------------ */
+/* Rendering                                                           */
+/* ------------------------------------------------------------------ */
+function showApp() {
+  if (!S.meta) return;
+  $('signin').classList.add('hidden');
+  $('app').classList.remove('hidden');
+}
+
+function setLang(lang) {
+  S.lang = lang === 'en' ? 'en' : 'fa';
+  lsSet('mla_lang', S.lang);
+  document.documentElement.lang = S.lang === 'fa' ? 'fa-AF' : 'en-GB';
+  document.documentElement.dir = S.lang === 'fa' ? 'rtl' : 'ltr';
+  $('si-sub').textContent = t('signinSub');
+  $('signout').textContent = t('signout');
+  $('lang').textContent = t('other');
+  $('search').placeholder = t('search');
+  render();
+}
+
+function renderSync() {
+  const el = $('sync');
+  if (!el) return;
+  const pending = S.outbox.length;
+  let cls = 'online', text = t('s_online');
+  if (!navigator.onLine) { cls = pending ? 'pending' : ''; text = t('s_offline') + (pending ? ` · ${pending} ${t('s_pending')}` : ''); }
+  else if (S.needSignin) { cls = 'signin'; text = t('s_signin'); }
+  else if (S.syncing) { cls = 'pending'; text = t('s_syncing'); }
+  else if (S.syncError) { cls = 'error'; text = t('s_error'); }
+  else if (pending) { cls = 'pending'; text = `${pending} ${t('s_pending')}`; }
+  el.className = 'sync ' + cls;
+  $('sync-text').textContent = text;
+  el.title = S.syncError ? errText(S.syncError) : (S.lastSync ? fmtTime(new Date(S.lastSync).toISOString()) : '');
 }
 
 function render() {
-  const d = state.data, fa = state.lang === 'fa';
-  const appName = fa ? (d.app.name_dari || 'اپلیکیشن زبان مادری') : (d.app.name_en || 'MLA Workapp');
-  el('app-name').textContent = appName;
-  document.title = appName;
-  el('who').textContent = (fa ? d.user.name_dari : d.user.name_en) || d.user.email;
+  if (!S.meta) { renderSync(); return; }
+  const fa = S.lang === 'fa';
+  const name = fa ? S.meta.app.name_dari : S.meta.app.name_en;
+  $('app-name').textContent = name;
+  document.title = name;
+  $('who').textContent = `${userName(S.email) || S.email}`;
+  $('views').innerHTML = ['board', 'mine', 'list', 'calendar', 'projects']
+    .map(v => `<button data-view="${v}" class="${S.view === v ? 'on' : ''}">${esc(t('v_' + v))}</button>`).join('');
 
-  el('boards').innerHTML = d.boards.map(b =>
-    `<button data-b="${esc(b.board_id)}" class="${b.board_id === state.board ? 'on' : ''}">` +
-    `${esc(fa ? b.name_dari : b.name_en)}` +
-    `${b.confidential === 'yes' ? ` <span class="lock">· ${esc(t('confidential'))}</span>` : ''}</button>`
-  ).join('');
-  el('boards').querySelectorAll('button').forEach(btn =>
-    btn.onclick = () => { state.board = btn.dataset.b; storeSet('mla_board', state.board); render(); });
+  const boards = boardsList();
+  if (!boards.some(b => b.board_id === S.board)) S.board = (boards[0] || {}).board_id || '';
+  const nav = $('boards');
+  nav.classList.toggle('hidden', S.view !== 'board');
+  nav.innerHTML = boards.map(b => `<button data-board="${esc(b.board_id)}" class="${b.board_id === S.board ? 'on' : ''}">${esc(boardName(b))}${isYes(b.confidential) ? ` <span class="lock">· ${esc(t('confidential'))}</span>` : ''}</button>`).join('');
 
-  const cards = d.cards.filter(c => c.board_id === state.board);
-  el('board').innerHTML = d.stages.map(s => {
-    const list = cards.filter(c => c.status === s.id);
-    const body = list.length ? list.map(c =>
-      `<div class="card"><div class="t">${esc(c.title)}</div>` +
-      `<div class="m">${c.owner_email ? esc(t('owner')) + ': ' + esc(c.owner_email) : ''}` +
-      `${c.due_date ? ' · ' + esc(t('due')) + ': ' + esc(c.due_date.slice(0, 10)) : ''}</div></div>`).join('')
-      : `<div class="empty">${esc(t('empty'))}</div>`;
-    return `<div class="column"><h3>${esc(fa ? s.dari : s.en)} <span>${list.length}</span></h3>${body}</div>`;
-  }).join('');
-
-  el('foot').textContent = `${t('version')} ${d.app.version} · ${d.user.email} · ${d.user.role}`;
+  const main = $('main');
+  const quickDraft = $('quick-input') ? $('quick-input').value : '';
+  if (S.view === 'board') main.innerHTML = renderBoard();
+  else if (S.view === 'mine') main.innerHTML = renderMine();
+  else if (S.view === 'list') main.innerHTML = renderList();
+  else if (S.view === 'calendar') main.innerHTML = renderCalendar();
+  else main.innerHTML = renderProjects();
+  if (S.quickAdd) { const q = $('quick-input'); if (q) { q.value = quickDraft; q.focus(); } }
+  if (S.openCard) renderCardDialog();
+  renderSync();
 }
 
-function signOut() {
-  if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
-  state.idToken = null; state.data = null;
-  el('app').style.display = 'none';
-  el('signin').style.display = 'block';
+function cardTile(c, opts = {}) {
+  const items = Object.values(S.t.Checklist).filter(i => i.card_id === c.card_id && !isYes(i.archived));
+  const done = items.filter(i => isYes(i.done)).length;
+  const ncomments = Object.values(S.t.Comments).filter(m => m.card_id === c.card_id).length;
+  const labels = String(c.labels || '').split(',').filter(Boolean);
+  const dc = dueClass(c);
+  const board = S.t.Boards[c.board_id];
+  return `<div class="card" role="button" tabindex="0" data-card="${esc(c.card_id)}" ${opts.drag ? 'draggable="true"' : ''}>
+    ${labels.length ? `<div class="labels">${labels.map(l => `<span class="lbl ${LABEL_COLORS[l] || 'grey'}"></span>`).join('')}</div>` : ''}
+    <div class="t">${esc(c.title)}</div>
+    <div class="meta">
+      ${opts.showBoard && board ? `<span class="badge">${esc(boardName(board))}</span>` : ''}
+      ${opts.showStage ? `<span class="badge">${esc(stageName(c.status))}</span>` : ''}
+      ${c.due_date ? `<span class="badge ${dc}">⏱ ${esc(fmtDate(c.due_date))}</span>` : ''}
+      ${items.length ? `<span class="badge ${done === items.length ? 'done' : ''}">☑ ${done}/${items.length}</span>` : ''}
+      ${ncomments ? `<span class="badge">💬 ${ncomments}</span>` : ''}
+      ${c.recurrence ? `<span class="badge">↻</span>` : ''}
+      ${!c.owner_email && c.type !== 'Reference' && !isDone(c) ? `<span class="badge warn">${esc(t('noOwner'))}</span>` : ''}
+      ${c.owner_email ? `<span class="avatar" title="${esc(userName(c.owner_email))}">${esc(initials(c.owner_email))}</span>` : ''}
+    </div>
+  </div>`;
 }
 
-window.onload = () => {
-  setLang(storeGet('mla_lang') || 'fa');
-  el('lang').onclick = () => setLang(state.lang === 'fa' ? 'en' : 'fa');
-  el('signout').onclick = signOut;
-  if (CONFIG.CLIENT_ID.startsWith('PASTE') || CONFIG.API_URL.startsWith('PASTE')) {
-    el('si-msg').textContent = errText('config');
+function renderBoard() {
+  const all = cards().filter(c => c.board_id === S.board && matchesSearch(c));
+  const refs = all.filter(c => c.type === 'Reference');
+  const work = all.filter(c => c.type !== 'Reference' && !c.parent_card_id);
+  let h = '';
+  if (refs.length) {
+    h += `<details class="refs"><summary>📌 ${esc(t('reference'))} (${refs.length})</summary><div class="row">
+      ${refs.map(c => `<button data-card="${esc(c.card_id)}">${esc(c.title)}</button>`).join('')}</div></details>`;
+  }
+  h += '<div class="kanban">';
+  stages().forEach(s => {
+    const list = work.filter(c => c.status === s.id).sort(sortForColumn);
+    const locked = APPROVER_STAGES.includes(s.id);
+    h += `<section class="column" data-stage="${s.id}">
+      <h3><span>${esc(S.lang === 'fa' ? s.dari : s.en)} ${locked ? `<span class="lockicon">🔒</span>` : ''}</span><span class="n">${list.length}</span></h3>
+      ${list.length ? list.map(c => cardTile(c, { drag: canEdit() })).join('') : `<div class="empty">${esc(t('empty'))}</div>`}
+      ${canEdit() && (!locked || isApprover()) ? (S.quickAdd === s.id
+        ? `<form class="quick" data-quick="${s.id}"><input id="quick-input" placeholder="${esc(t('title'))}" maxlength="300"><button class="primary">${esc(t('add'))}</button></form>`
+        : `<button class="add" data-add="${s.id}">${esc(t('addCard'))}</button>`) : ''}
+    </section>`;
+  });
+  return h + '</div>';
+}
+
+function sortForColumn(a, b) {
+  const pr = { urgent: 0, high: 1, medium: 2, low: 3, '': 4 };
+  const pa = pr[a.priority || ''] ?? 4, pb = pr[b.priority || ''] ?? 4;
+  if (pa !== pb) return pa - pb;
+  return (a.due_date || '9999') < (b.due_date || '9999') ? -1 : (a.due_date || '9999') > (b.due_date || '9999') ? 1 : (a.created_at < b.created_at ? -1 : 1);
+}
+
+function renderMine() {
+  const today = todayStr(), week = addDays(today, 7);
+  const mine = cards().filter(c => !isDone(c) && c.type !== 'Reference' && matchesSearch(c) &&
+    (c.owner_email === S.email || String(c.members || '').split(',').includes(S.email)));
+  const groups = [
+    [t('overdue'), mine.filter(c => c.due_date && c.due_date < today)],
+    [t('thisWeek'), mine.filter(c => c.due_date && c.due_date >= today && c.due_date <= week)],
+    [t('later'), mine.filter(c => c.due_date && c.due_date > week)],
+    [t('noDate'), mine.filter(c => !c.due_date)],
+  ];
+  let h = '';
+  if (isApprover()) {
+    const waiting = cards().filter(c => c.status === 'approval' && matchesSearch(c));
+    h += group(t('awaitingMe'), waiting);
+  }
+  groups.forEach(([title, list]) => { h += group(title, list.sort((a, b) => (a.due_date || '') < (b.due_date || '') ? -1 : 1)); });
+  return h;
+  function group(title, list) {
+    return `<section class="group"><h2>${esc(title)} <span class="n">${list.length}</span></h2>
+      ${list.length ? `<div class="stack">${list.map(c => cardTile(c, { showBoard: true, showStage: true })).join('')}</div>` : `<div class="empty">${esc(t('empty'))}</div>`}</section>`;
+  }
+}
+
+function filteredList() {
+  const f = S.filters, today = todayStr();
+  return cards().filter(c => matchesSearch(c)
+    && (!f.board || c.board_id === f.board)
+    && (!f.status || c.status === f.status)
+    && (!f.owner || c.owner_email === f.owner)
+    && (!f.label || String(c.labels || '').split(',').includes(f.label))
+    && (!f.overdue || (c.due_date && c.due_date < today && !isDone(c)))
+    && (f.done || f.status || !isDone(c)));
+}
+
+function renderList() {
+  const f = S.filters;
+  const opt = (v, label, sel) => `<option value="${esc(v)}" ${sel === v ? 'selected' : ''}>${esc(label)}</option>`;
+  const labels = (S.meta.labels || []);
+  let h = `<div class="filters">
+    <select data-filter="board">${opt('', t('allBoards'), f.board)}${boardsList().map(b => opt(b.board_id, boardName(b), f.board)).join('')}</select>
+    <select data-filter="status">${opt('', t('allStages'), f.status)}${stages().map(s => opt(s.id, stageName(s.id), f.status)).join('')}</select>
+    <select data-filter="owner">${opt('', t('allOwners'), f.owner)}${activeUsers().map(u => opt(u.email, userName(u.email), f.owner)).join('')}</select>
+    <select data-filter="label">${opt('', t('allLabels'), f.label)}${labels.map(l => opt(l.label_id, S.lang === 'fa' ? l.name_dari : l.name_en, f.label)).join('')}</select>
+    <label><input type="checkbox" data-filter="overdue" ${f.overdue ? 'checked' : ''}> ${esc(t('onlyOverdue'))}</label>
+    <label><input type="checkbox" data-filter="done" ${f.done ? 'checked' : ''}> ${esc(t('showDone'))}</label>
+  </div>`;
+  const list = filteredList();
+  const k = S.sort.key, d = S.sort.dir;
+  const val = c => k === 'board' ? boardName(S.t.Boards[c.board_id]) : k === 'owner' ? userName(c.owner_email) : k === 'status' ? stages().findIndex(s => s.id === c.status) : (c[k] || (k === 'due_date' ? '9999' : ''));
+  list.sort((a, b) => (val(a) < val(b) ? -1 : val(a) > val(b) ? 1 : 0) * d);
+  const th = (key, label) => `<th data-sort="${key}">${esc(label)}${k === key ? (d > 0 ? ' ▲' : ' ▼') : ''}</th>`;
+  h += `<div class="tablewrap"><table class="list"><thead><tr>${th('title', t('title'))}${th('board', t('board'))}${th('status', t('status'))}${th('owner', t('owner'))}${th('due_date', t('due'))}</tr></thead><tbody>
+    ${list.map(c => `<tr data-card="${esc(c.card_id)}"><td>${esc(c.title)}</td><td>${esc(boardName(S.t.Boards[c.board_id]))}</td><td>${esc(stageName(c.status))}</td>
+      <td>${esc(userName(c.owner_email))}</td><td>${c.due_date ? `<span class="badge ${dueClass(c)}">${esc(c.due_date)}</span>` : ''}</td></tr>`).join('')}
+  </tbody></table></div>${list.length ? '' : `<div class="empty">${esc(t('empty'))}</div>`}`;
+  return h;
+}
+
+function renderCalendar() {
+  const now = new Date();
+  if (!S.calMonth) S.calMonth = { y: now.getFullYear(), m: now.getMonth() };
+  const { y, m } = S.calMonth;
+  const weekStart = S.lang === 'fa' ? 6 : 1; // Saturday for Dari, Monday for English
+  const first = new Date(y, m, 1);
+  const offset = (first.getDay() - weekStart + 7) % 7;
+  const start = new Date(y, m, 1 - offset);
+  const today = todayStr();
+  const byDay = {};
+  cards().filter(c => c.due_date && c.type !== 'Reference' && matchesSearch(c)).forEach(c => { (byDay[c.due_date] = byDay[c.due_date] || []).push(c); });
+  let h = `<div class="calhead"><button data-cal="-1">‹ ${esc(t('prev'))}</button><h2>${esc(T[S.lang].months[m])} ${y}</h2><button data-cal="1">${esc(t('next'))} ›</button><button data-cal="0">${esc(t('today'))}</button></div><div class="cal">`;
+  for (let i = 0; i < 7; i++) h += `<div class="dow">${esc(T[S.lang].dows[(weekStart + i) % 7])}</div>`;
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const list = byDay[key] || [];
+    h += `<div class="day ${d.getMonth() !== m ? 'out' : ''} ${key === today ? 'today' : ''}"><span class="num">${d.getDate()}</span>
+      ${list.slice(0, 4).map(c => `<button class="ev ${dueClass(c) === 'overdue' ? 'overdue' : ''}" data-card="${esc(c.card_id)}" title="${esc(c.title)}">${esc(c.title)}</button>`).join('')}
+      ${list.length > 4 ? `<span class="small muted">+${list.length - 4}</span>` : ''}</div>`;
+  }
+  return h + '</div>';
+}
+
+function renderProjects() {
+  const projects = Object.values(S.t.Projects).filter(p => !isYes(p.archived)).sort((a, b) => a.name.localeCompare(b.name));
+  let h = canEdit() ? `<div class="filters"><button class="primary" data-newproject>${esc(t('newProject'))}</button></div>` : '';
+  if (!projects.length) h += `<div class="empty">${esc(t('empty'))}</div>`;
+  projects.forEach(p => {
+    const list = cards().filter(c => c.project_id === p.project_id && matchesSearch(c));
+    const done = list.filter(isDone).length;
+    const pct = list.length ? Math.round(done / list.length * 100) : 0;
+    h += `<details class="proj" ${S.openProject === p.project_id ? 'open' : ''} data-project="${esc(p.project_id)}"><summary>${esc(p.name)}
+      <span class="bar"><i style="width:${pct}%"></i></span><span class="small muted">${done}/${list.length} ${esc(t('cards'))}</span>
+      ${p.owner_email ? `<span class="small muted">· ${esc(userName(p.owner_email))}</span>` : ''}</summary>
+      <div class="stack" style="margin-top:10px">${list.map(c => cardTile(c, { showBoard: true, showStage: true })).join('') || `<div class="empty">${esc(t('empty'))}</div>`}</div></details>`;
+  });
+  return h;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card dialog                                                          */
+/* ------------------------------------------------------------------ */
+function openCard(id) { S.openCard = id; S.history = null; S.editDesc = false; S.confirmHide = false; try { history.replaceState(null, '', '#card=' + id); } catch (e) {} renderCardDialog(); }
+function closeCard() { S.openCard = null; closeOverlay('card'); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+
+function renderCardDialog() {
+  const c = S.t.Cards[S.openCard];
+  if (!c) { closeCard(); return; }
+  const ro = !canEdit();
+  const dis = ro ? 'disabled' : '';
+  const opt = (v, label, sel, disabled) => `<option value="${esc(v)}" ${String(sel || '') === v ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(label)}</option>`;
+  const items = Object.values(S.t.Checklist).filter(i => i.card_id === c.card_id && !isYes(i.archived)).sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0) || (a.created_at < b.created_at ? -1 : 1));
+  const comments = Object.values(S.t.Comments).filter(m => m.card_id === c.card_id).sort((a, b) => a.created_at < b.created_at ? 1 : -1);
+  const subs = cards().filter(x => x.parent_card_id === c.card_id);
+  const labels = String(c.labels || '').split(',').filter(Boolean);
+  const members = String(c.members || '').split(',').filter(Boolean);
+  const users = activeUsers();
+  if (c.owner_email && !users.some(u => u.email === c.owner_email)) users.unshift({ email: c.owner_email });
+  const projects = Object.values(S.t.Projects).filter(p => !isYes(p.archived));
+  const sameBoard = cards().filter(x => x.board_id === c.board_id && x.card_id !== c.card_id && !x.parent_card_id && x.type !== 'Reference');
+  const stageLocked = s => !isApprover() && (APPROVER_STAGES.includes(s) || APPROVER_STAGES.includes(c.status)) && s !== c.status;
+  const done = items.filter(i => isYes(i.done)).length;
+
+  const html = `<div class="dialog" role="dialog" aria-modal="true">
+    <div class="dhead">
+      <textarea id="f-title" rows="1" maxlength="300" ${dis}>${esc(c.title)}</textarea>
+      <button class="ghost" data-close aria-label="${esc(t('close'))}">✕</button>
+    </div>
+    <div class="dbody">
+      <div>
+        ${ro ? `<div class="notice">${esc(t('readOnly'))}</div>` : ''}
+        ${c.source === 'trello' && c.source_ref ? `<div class="small muted" style="margin-bottom:10px">${esc(t('fromTrello'))}: <a href="${esc(c.source_ref)}" target="_blank" rel="noopener">${esc(c.source_ref.replace('https://', ''))}</a></div>` : ''}
+        <div class="sec"><h4>${esc(t('labels'))}</h4><div class="chips">
+          ${(S.meta.labels || []).map(l => `<button class="chip ${labels.includes(l.label_id) ? 'on' : ''}" data-label="${esc(l.label_id)}" ${dis}><span class="sw lbl ${LABEL_COLORS[l.label_id] || 'grey'}"></span>${esc(S.lang === 'fa' ? l.name_dari : l.name_en)}</button>`).join('')}
+        </div></div>
+        <div class="sec"><h4>${esc(t('description'))} ${!ro && !S.editDesc ? `<button class="ghost small" data-editdesc>${esc(t('edit'))}</button>` : ''}</h4>
+          ${S.editDesc ? `<textarea id="f-desc" rows="8">${esc(c.description)}</textarea><div style="display:flex;gap:6px;margin-top:6px"><button class="primary" data-savedesc>${esc(t('save'))}</button><button data-canceldesc>${esc(t('cancel'))}</button></div>`
+            : `<div class="desc" ${ro ? '' : 'data-editdesc'}>${c.description ? linkify(c.description) : `<span class="muted">${esc(t('noDescription'))}</span>`}</div>`}
+        </div>
+        <div class="sec"><h4>${esc(t('checklist'))} ${items.length ? `<span class="small muted">${done}/${items.length}</span>` : ''}</h4>
+          ${items.map(i => `<div class="check ${isYes(i.done) ? 'done' : ''}"><input type="checkbox" data-item="${esc(i.item_id)}" ${isYes(i.done) ? 'checked' : ''} ${dis}>
+            <span class="txt">${linkify(i.text)}</span>${ro ? '' : `<button class="ghost small" data-delitem="${esc(i.item_id)}" aria-label="remove">✕</button>`}</div>`).join('')}
+          ${ro ? '' : `<form class="quick" data-additem style="margin-top:6px"><input id="f-item" placeholder="${esc(t('addItem'))}" maxlength="500"><button>${esc(t('add'))}</button></form>`}
+        </div>
+        ${c.type !== 'Reference' ? `<div class="sec"><h4>${esc(t('subtasks'))} ${subs.length ? `<span class="small muted">${subs.filter(isDone).length}/${subs.length}</span>` : ''}</h4>
+          ${subs.map(s => `<div class="check ${isDone(s) ? 'done' : ''}"><span class="txt"><a href="#card=${esc(s.card_id)}" data-card="${esc(s.card_id)}">${esc(s.title)}</a></span><span class="badge">${esc(stageName(s.status))}</span></div>`).join('')}
+          ${ro ? '' : `<form class="quick" data-addsub style="margin-top:6px"><input id="f-sub" placeholder="${esc(t('addSubtask'))}" maxlength="300"><button>${esc(t('add'))}</button></form>`}
+        </div>` : ''}
+        <div class="sec"><h4>${esc(t('comments'))}</h4>
+          ${ro ? '' : `<form data-addcomment><textarea id="f-comment" rows="2" placeholder="${esc(t('writeComment'))}"></textarea><div style="margin-top:6px"><button class="primary">${esc(t('send'))}</button></div></form>`}
+          ${comments.map(m => `<div class="comment"><div class="by">${esc(userName(m.author_email))} · ${esc(fmtTime(m.created_at))}</div><div class="body">${linkify(m.text)}</div></div>`).join('')}
+        </div>
+        <div class="sec"><h4>${esc(t('history'))}</h4>
+          ${S.history ? (S.history.length ? S.history.map(e => `<div class="event"><b>${esc(userName(e.user))}</b> · ${esc(e.field)}: ${esc(e.old_value)} → ${esc(e.new_value)} <span class="muted small">${esc(fmtTime(e.time))}</span></div>`).join('') : `<div class="empty">${esc(t('empty'))}</div>`)
+            : `<button data-history>${esc(t('showHistory'))}</button>`}
+        </div>
+      </div>
+      <aside class="side">
+        <div class="field"><label>${esc(t('status'))}</label><select id="f-status" ${dis}>${stages().map(s => opt(s.id, stageName(s.id) + (APPROVER_STAGES.includes(s.id) ? ' 🔒' : ''), c.status, stageLocked(s.id))).join('')}</select></div>
+        <div class="field"><label>${esc(t('board'))}</label><select id="f-board" ${dis}>${boardsList().map(b => opt(b.board_id, boardName(b), c.board_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('owner'))}</label><select id="f-owner" ${dis}>${opt('', t('noOwner'), c.owner_email)}${users.map(u => opt(u.email, userName(u.email), c.owner_email)).join('')}</select></div>
+        <div class="field"><label>${esc(t('due'))}</label><input type="date" id="f-due" value="${esc(c.due_date)}" ${dis}></div>
+        <div class="field"><label>${esc(t('start'))}</label><input type="date" id="f-start" value="${esc(c.start_date)}" ${dis}></div>
+        <div class="field"><label>${esc(t('priority'))}</label><select id="f-priority" ${dis}>${Object.entries(T[S.lang].priorities).map(([v, l]) => opt(v, l, c.priority)).join('')}</select></div>
+        <div class="field"><label>${esc(t('type'))}</label><select id="f-type" ${dis}>${Object.entries(T[S.lang].types).map(([v, l]) => opt(v, l, c.type || 'Task')).join('')}</select></div>
+        <div class="field"><label>${esc(t('members'))}</label><div class="chips">${users.filter(u => u.email !== c.owner_email).map(u => `<button class="chip ${members.includes(u.email) ? 'on' : ''}" data-member="${esc(u.email)}" ${dis}>${esc(userName(u.email))}</button>`).join('') || `<span class="muted small">${esc(t('none'))}</span>`}</div></div>
+        <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${dis}>${opt('', t('noProject'), c.project_id)}${projects.map(p => opt(p.project_id, p.name, c.project_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('parent'))}</label><select id="f-parent" ${dis}>${opt('', t('none'), c.parent_card_id)}${sameBoard.map(x => opt(x.card_id, x.title.slice(0, 60), c.parent_card_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('recurrence'))}</label><select id="f-recur" ${dis}>${Object.entries(T[S.lang].recur).map(([v, l]) => opt(v, l, c.recurrence)).join('')}</select></div>
+        <div class="field"><label>${esc(t('link'))}</label><div class="quick"><input type="url" id="f-link" value="${esc(c.drive_link)}" placeholder="https://drive.google.com/…" ${dis}>${c.drive_link ? `<a class="badge" href="${esc(c.drive_link)}" target="_blank" rel="noopener">${esc(t('open'))}</a>` : ''}</div></div>
+        <div class="small muted">${esc(t('created'))} ${esc(fmtTime(c.created_at))} ${c.created_by ? esc(t('by')) + ' ' + esc(userName(c.created_by)) : ''}</div>
+      </aside>
+    </div>
+    <div class="actions">
+      <button data-whatsapp>🟢 ${esc(t('whatsapp'))}</button>
+      <button data-copylink>🔗 ${esc(t('copyLink'))}</button>
+      <span class="spacer"></span>
+      ${me().role === 'admin' ? `<button data-hide style="color:var(--danger)">${esc(S.confirmHide ? t('hideConfirm') : t('hide'))}</button>` : ''}
+      <button data-close>${esc(t('close'))}</button>
+    </div>
+  </div>`;
+  const root = document.querySelector('.overlay[data-name="card"]');
+  const scroll = root ? root.scrollTop : 0;
+  const focused = document.activeElement && document.activeElement.id;
+  const drafts = {};
+  ['f-comment', 'f-item', 'f-sub', 'f-desc'].concat(focused === 'f-title' ? ['f-title'] : []).forEach(id => { if ($(id)) drafts[id] = $(id).value; });
+  openOverlay('card', html);
+  Object.entries(drafts).forEach(([id, v]) => { if ($(id) && v) $(id).value = v; });
+  const ov = document.querySelector('.overlay[data-name="card"]');
+  ov.scrollTop = scroll;
+  autosize($('f-title'));
+  if (focused && $(focused) && focused !== 'f-title') $(focused).focus();
+  if (S.editDesc && $('f-desc')) $('f-desc').focus();
+}
+
+function autosize(el) { if (!el) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+
+function openOverlay(name, html) {
+  let ov = document.querySelector(`.overlay[data-name="${name}"]`);
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.className = 'overlay'; ov.dataset.name = name;
+    ov.addEventListener('mousedown', e => { if (e.target === ov) { name === 'card' ? closeCard() : closeOverlay(name); } });
+    $('overlay-root').appendChild(ov);
+  }
+  ov.innerHTML = html;
+}
+function closeOverlay(name) { const ov = document.querySelector(`.overlay[data-name="${name}"]`); if (ov) ov.remove(); }
+
+function newProjectDialog() {
+  openOverlay('project', `<div class="dialog small"><form data-saveproject>
+    <div class="dhead"><b>${esc(t('newProject').replace('+ ', ''))}</b></div>
+    <div style="padding:6px 18px 12px" class="side">
+      <div class="field"><label>${esc(t('projectName'))}</label><input id="p-name" required maxlength="200"></div>
+      <div class="field"><label>${esc(t('owner'))}</label><select id="p-owner">${activeUsers().map(u => `<option value="${esc(u.email)}" ${u.email === S.email ? 'selected' : ''}>${esc(userName(u.email))}</option>`).join('')}</select></div>
+      <div class="field"><label>${esc(t('due'))}</label><input type="date" id="p-due"></div>
+    </div>
+    <div class="actions"><button class="primary">${esc(t('save'))}</button><button type="button" data-close>${esc(t('cancel'))}</button></div></form></div>`);
+  setTimeout(() => $('p-name') && $('p-name').focus(), 30);
+}
+
+async function loadHistory() {
+  if (!navigator.onLine) { toast(t('offlineHistory')); return; }
+  const tok = await getToken();
+  if (!tok) { showSigninDialog(); return; }
+  try {
+    const out = await api({ action: 'activity', idToken: tok, cardId: S.openCard });
+    if (!out.ok) { toast(errText(out.error)); return; }
+    S.history = out.events;
+    renderCardDialog();
+  } catch (e) { toast(errText('network')); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Events                                                              */
+/* ------------------------------------------------------------------ */
+document.addEventListener('click', e => {
+  const el = e.target.closest('button, a, tr, summary, [data-card]');
+  if (!el) return;
+  const d = el.dataset;
+  if (d.view) { S.view = d.view; lsSet('mla_view', S.view); S.quickAdd = null; render(); return; }
+  if (d.board) { S.board = d.board; lsSet('mla_board', S.board); S.quickAdd = null; render(); return; }
+  if (d.card && !el.closest('.overlay') || (d.card && el.tagName === 'A')) { e.preventDefault(); openCard(d.card); return; }
+  if (d.add) { S.quickAdd = d.add; render(); return; }
+  if (d.sort) { S.sort = { key: d.sort, dir: S.sort.key === d.sort ? -S.sort.dir : 1 }; render(); return; }
+  if (d.cal) {
+    const now = new Date();
+    if (d.cal === '0') S.calMonth = { y: now.getFullYear(), m: now.getMonth() };
+    else { const m = S.calMonth.m + Number(d.cal); S.calMonth = { y: S.calMonth.y + Math.floor(m / 12), m: (m + 12) % 12 }; }
+    render(); return;
+  }
+  if ('newproject' in d) { newProjectDialog(); return; }
+  if ('close' in d) { const ov = el.closest('.overlay'); if (ov && ov.dataset.name === 'card') closeCard(); else if (ov) closeOverlay(ov.dataset.name); return; }
+  if (el.tagName === 'SUMMARY' && el.parentElement.dataset.project) { S.openProject = el.parentElement.open ? null : el.parentElement.dataset.project; return; }
+
+  // Card dialog actions
+  const c = S.openCard && S.t.Cards[S.openCard];
+  if (!c || !el.closest('.overlay')) return;
+  if (d.label) {
+    const set = new Set(String(c.labels || '').split(',').filter(Boolean));
+    set.has(d.label) ? set.delete(d.label) : set.add(d.label);
+    const labels = [...set].join(',');
+    const prio = set.has('urgent') ? 'urgent' : set.has('high') ? (c.priority === 'urgent' ? 'high' : c.priority || 'high') : c.priority;
+    change('Cards', c.card_id, prio !== c.priority ? { labels, priority: prio } : { labels });
     return;
   }
-  initGoogle();
-};
+  if (d.member) {
+    const set = new Set(String(c.members || '').split(',').filter(Boolean));
+    set.has(d.member) ? set.delete(d.member) : set.add(d.member);
+    change('Cards', c.card_id, { members: [...set].join(',') }); return;
+  }
+  if ('editdesc' in d) { S.editDesc = true; renderCardDialog(); return; }
+  if ('canceldesc' in d) { S.editDesc = false; renderCardDialog(); return; }
+  if ('savedesc' in d) { const v = $('f-desc').value; $('f-desc').value = ''; S.editDesc = false; if (v !== (c.description || '')) change('Cards', c.card_id, { description: v }); else renderCardDialog(); return; }
+  if (d.delitem) { change('Checklist', d.delitem, { archived: 'yes' }); return; }
+  if ('history' in d) { loadHistory(); return; }
+  if ('whatsapp' in d) {
+    const url = location.origin + location.pathname + '#card=' + c.card_id;
+    const lines = [c.title, `${t('status')}: ${stageName(c.status)}`];
+    if (c.due_date) lines.push(`${t('due')}: ${c.due_date}`);
+    if (c.owner_email) lines.push(`${t('owner')}: ${userName(c.owner_email)}`);
+    lines.push(url);
+    window.open('https://wa.me/?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    return;
+  }
+  if ('copylink' in d) {
+    const url = location.origin + location.pathname + '#card=' + c.card_id;
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast(t('copied')), () => toast(url));
+    return;
+  }
+  if ('hide' in d) {
+    if (!S.confirmHide) { S.confirmHide = true; renderCardDialog(); setTimeout(() => { S.confirmHide = false; }, 4000); return; }
+    const id = c.card_id; closeCard(); change('Cards', id, { archived: 'yes' }); delete S.t.Cards[id]; render(); return;
+  }
+});
 
-function initGoogle() {
-  // The Google sign-in script loads asynchronously; wait until it is ready.
-  if (!(window.google && google.accounts && google.accounts.id)) return setTimeout(initGoogle, 100);
-  google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: onCredential, auto_select: true });
-  google.accounts.id.renderButton(el('gbtn'), { theme: 'outline', size: 'large', shape: 'pill', locale: 'fa' });
-  google.accounts.id.prompt();
+document.addEventListener('submit', e => {
+  const f = e.target;
+  e.preventDefault();
+  const d = f.dataset;
+  if (d.quick) {
+    const v = $('quick-input').value.trim();
+    $('quick-input').value = '';
+    if (v) newCard({ board_id: S.board, title: v, status: d.quick });
+    S.quickAdd = d.quick; render(); return;
+  }
+  if ('saveproject' in d) {
+    const name = $('p-name').value.trim();
+    if (!name) return;
+    change('Projects', uid('p'), { name, owner_email: $('p-owner').value, target_date: $('p-due').value, status: 'active' });
+    closeOverlay('project'); return;
+  }
+  const c = S.openCard && S.t.Cards[S.openCard];
+  if (!c) return;
+  if ('additem' in d) {
+    const v = $('f-item').value.trim();
+    if (!v) return;
+    $('f-item').value = '';
+    const n = Object.values(S.t.Checklist).filter(i => i.card_id === c.card_id).length + 1;
+    change('Checklist', uid('i'), { card_id: c.card_id, text: v, done: 'no', sort: String(n) });
+    setTimeout(() => $('f-item') && $('f-item').focus(), 0); return;
+  }
+  if ('addsub' in d) {
+    const v = $('f-sub').value.trim();
+    if (!v) return;
+    $('f-sub').value = '';
+    newCard({ board_id: c.board_id, title: v, status: 'new', parent_card_id: c.card_id, project_id: c.project_id || '' });
+    setTimeout(() => $('f-sub') && $('f-sub').focus(), 0); return;
+  }
+  if ('addcomment' in d) {
+    const v = $('f-comment').value.trim();
+    if (!v) return;
+    $('f-comment').value = '';
+    change('Comments', uid('m'), { card_id: c.card_id, text: v }); return;
+  }
+});
+
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.filter) {
+    S.filters[el.dataset.filter] = el.type === 'checkbox' ? el.checked : el.value;
+    render(); return;
+  }
+  const c = S.openCard && S.t.Cards[S.openCard];
+  if (!c) return;
+  if (el.dataset.item) { change('Checklist', el.dataset.item, { done: el.checked ? 'yes' : 'no' }); return; }
+  const map = { 'f-status': 'status', 'f-board': 'board_id', 'f-owner': 'owner_email', 'f-due': 'due_date', 'f-start': 'start_date',
+    'f-priority': 'priority', 'f-type': 'type', 'f-project': 'project_id', 'f-parent': 'parent_card_id', 'f-recur': 'recurrence', 'f-link': 'drive_link', 'f-title': 'title' };
+  const field = map[el.id];
+  if (!field) return;
+  let v = el.value;
+  if (field === 'title') { v = v.replace(/\s+/g, ' ').trim(); if (!v) { el.value = c.title; toast(errText('title_required')); return; } }
+  if (field === 'status' && !isApprover() && (APPROVER_STAGES.includes(v) || APPROVER_STAGES.includes(c.status))) { el.value = c.status; toast(errText('needs_approver')); return; }
+  if (v !== (c[field] || '')) change('Cards', c.card_id, { [field]: v });
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'search') { S.search = e.target.value.trim(); render(); }
+  if (e.target.id === 'f-title') autosize(e.target);
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (S.quickAdd) { S.quickAdd = null; render(); return; }
+    const ovs = document.querySelectorAll('.overlay');
+    const top = ovs[ovs.length - 1];
+    if (top) { top.dataset.name === 'card' ? closeCard() : closeOverlay(top.dataset.name); }
+  }
+  if (e.key === 'Enter' && e.target.id === 'f-title') { e.preventDefault(); e.target.blur(); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.card[role=button]')) { e.preventDefault(); openCard(e.target.dataset.card); }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.target.id === 'f-comment') e.target.form.requestSubmit();
+});
+
+// Drag and drop between columns (desktop).
+let dragId = null;
+document.addEventListener('dragstart', e => { const c = e.target.closest && e.target.closest('.card[data-card]'); if (c) { dragId = c.dataset.card; e.dataTransfer.effectAllowed = 'move'; } });
+document.addEventListener('dragover', e => { const col = e.target.closest && e.target.closest('.column'); if (col && dragId) { e.preventDefault(); col.classList.add('drop'); } });
+document.addEventListener('dragleave', e => { const col = e.target.closest && e.target.closest('.column'); if (col) col.classList.remove('drop'); });
+document.addEventListener('drop', e => {
+  const col = e.target.closest && e.target.closest('.column');
+  document.querySelectorAll('.column.drop').forEach(x => x.classList.remove('drop'));
+  if (!col || !dragId) return;
+  e.preventDefault();
+  const c = S.t.Cards[dragId]; dragId = null;
+  const to = col.dataset.stage;
+  if (!c || c.status === to) return;
+  if (!isApprover() && (APPROVER_STAGES.includes(to) || APPROVER_STAGES.includes(c.status))) { toast(errText('needs_approver')); return; }
+  change('Cards', c.card_id, { status: to });
+});
+
+$('lang').onclick = () => setLang(S.lang === 'fa' ? 'en' : 'fa');
+$('signout').onclick = signOut;
+$('sync').onclick = () => { if (S.needSignin) showSigninDialog(); else sync(true); };
+window.addEventListener('online', () => { renderSync(); sync(true); });
+window.addEventListener('offline', renderSync);
+window.addEventListener('pagehide', () => { if (S.meta) persistNow(); });
+window.addEventListener('hashchange', openFromHash);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && S.meta) persistNow();
+  if (document.visibilityState === 'visible' && Date.now() - S.lastSync > 60000) sync();
+});
+setInterval(() => { if (document.visibilityState === 'visible') sync(); }, SYNC_EVERY_MS);
+
+function openFromHash() {
+  const m = location.hash.match(/card=([A-Za-z0-9_\-.]+)/);
+  if (m && S.t.Cards[m[1]] && S.openCard !== m[1]) openCard(m[1]);
 }
+
+/* ------------------------------------------------------------------ */
+/* Start                                                               */
+/* ------------------------------------------------------------------ */
+(async function start() {
+  setLang(lsGet('mla_lang') || 'fa');
+  S.view = lsGet('mla_view') || 'board';
+  S.board = lsGet('mla_board') || '';
+  await Store.open();
+  S.deviceId = (await Store.get('deviceId')) || uid('d');
+  Store.set('deviceId', S.deviceId);
+  const saved = await Store.get('data');
+  S.outbox = (await Store.get('outbox')) || [];
+  if (saved && saved.meta) {
+    S.meta = saved.meta; S.email = saved.email; S.since = saved.since || '';
+    TABLES.forEach(n => { S.t[n] = (saved.tables && saved.tables[n]) || {}; });
+    S.outbox.forEach(o => { S.t[o.table][o.id] = Object.assign(S.t[o.table][o.id] || { [ID_FIELD[o.table]]: o.id, archived: 'no', created_by: saved.email, created_at: new Date(o.at || Date.now()).toISOString() }, o.fields); });
+    if (!lsGet('mla_lang') && S.meta.user.language) setLang(S.meta.user.language);
+    showApp(); render(); openFromHash();
+  }
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+  initGoogle();
+  scheduleSync(12000);
+  if (!S.meta && !navigator.onLine) { $('si-msg').textContent = errText('network'); }
+})();
 </script>
 </body>
 </html>
