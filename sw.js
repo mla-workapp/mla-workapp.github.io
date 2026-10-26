@@ -1,6 +1,6 @@
 // MLA Workapp — offline support. Keeps the app itself on the device so it opens without internet.
 // Card data is stored separately by the app (IndexedDB) and synced when online.
-const CACHE = 'mla-workapp-v0.2.0';
+const CACHE = 'mla-workapp-v0.3.0';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

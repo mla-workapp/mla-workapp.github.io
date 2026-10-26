@@ -259,7 +259,7 @@ const CONFIG = {
   API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',
 };
 /* ============================================= */
-const APP_VERSION = '0.2.0';
+const APP_VERSION = '0.3.0';
 const SYNC_EVERY_MS = 3 * 60 * 1000;
 
 /* ------------------------------------------------------------------ */
@@ -293,7 +293,7 @@ const T = {
     removeProject: 'بدون پروژه', projectNameRequired: 'نام پروژه لازم است.',
     types: { Task: 'کار', Request: 'درخواست', Meeting: 'جلسه', Idea: 'ایده', Reference: 'مرجع' },
     priorities: { '': '—', urgent: 'فوری', high: 'بلند', medium: 'متوسط', low: 'پایین' },
-    recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار' },
+    recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار (همان تاریخ)', 'nth:1:0': 'یکشنبهٔ اول هر ماه' },
     dows: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'],
     months: ['جنوری', 'فبروری', 'مارچ', 'اپریل', 'می', 'جون', 'جولای', 'اگست', 'سپتامبر', 'اکتوبر', 'نومبر', 'دسامبر'],
     errors: {
@@ -330,7 +330,7 @@ const T = {
     removeProject: 'No project', projectNameRequired: 'A project needs a name.',
     types: { Task: 'Task', Request: 'Request', Meeting: 'Meeting', Idea: 'Idea', Reference: 'Reference' },
     priorities: { '': '—', urgent: 'Urgent', high: 'High', medium: 'Medium', low: 'Low' },
-    recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly' },
+    recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly (same date)', 'nth:1:0': 'First Sunday of each month' },
     dows: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     errors: {
