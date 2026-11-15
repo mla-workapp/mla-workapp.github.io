@@ -234,7 +234,7 @@ table.list td.sel, table.list th.sel { width: 40px; }
 .trow:hover { background: var(--fill-2); }
 .trow.proj-row { font-weight: 600; font-size: 16px; padding-block: 12px; }
 .trow.proj-row:hover { background: var(--fill-2); }
-.trow .tog { width: 26px; height: 26px; padding: 0; background: transparent; color: var(--label-3); flex: none; font-size: 12px; }
+.trow .tog { width: 26px; height: 26px; padding: 0; background: transparent; color: var(--label-2); flex: none; font-size: 16px; }
 .trow .tog:hover { background: var(--fill-2); color: var(--label); }
 .trow .tog.leaf { visibility: hidden; }
 .trow .ttl { background: transparent; color: var(--label); padding: 0; text-align: start; font-weight: inherit; flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; border-radius: 4px; }
@@ -406,7 +406,7 @@ const CONFIG = {
   API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',
 };
 /* ============================================= */
-const APP_VERSION = '0.4.0';
+const APP_VERSION = '0.5.0';
 const SYNC_EVERY_MS = 3 * 60 * 1000;
 
 /* ------------------------------------------------------------------ */
@@ -418,7 +418,7 @@ const T = {
     openN: 'کار باز', projectsN: 'پروژه', v_board: 'بورد', v_mine: 'کارهای من', v_list: 'فهرست', v_calendar: 'تقویم', v_projects: 'پروژه‌ها',
     s_online: 'همگام', s_offline: 'آفلاین', s_pending: 'در انتظار ارسال', s_syncing: 'در حال همگام‌سازی…', s_error: 'خطا در همگام‌سازی', s_signin: 'برای همگام‌سازی وارد شوید',
     empty: 'کارتی نیست', addCard: '+ کارت جدید', add: 'افزودن', cancel: 'لغو', save: 'ذخیره', close: 'بستن', edit: 'ویرایش',
-    reference: 'مرجع و قواعد تیم', confidential: 'محرم', approverOnly: 'فقط تأییدکننده',
+    reference: 'مرجع و قواعد تیم', ownOnly: 'فقط کارهای شما در این بورد نشان داده می‌شود. برای دسترسی کامل، با مدیر تماس بگیرید.', ownTag: 'فقط کارهای من', noBoards: 'هنوز به هیچ بوردی دسترسی ندارید. کارهای خود را در «کارهای من» ببینید، یا از مدیر بخواهید دسترسی بدهد.', confidential: 'محرم', approverOnly: 'فقط تأییدکننده',
     title: 'عنوان', board: 'بورد', status: 'مرحله', type: 'نوع', priority: 'اولویت', owner: 'مسئول', members: 'همکاران',
     start: 'تاریخ آغاز', due: 'تاریخ ختم', labels: 'برچسب‌ها', project: 'پروژه', parent: 'کارت اصلی', recurrence: 'تکرار',
     link: 'لینک گوگل درایو', open: 'باز کردن', description: 'توضیحات', noDescription: 'برای افزودن توضیحات کلیک کنید', checklist: 'چک‌لیست',
@@ -455,7 +455,7 @@ const T = {
     openN: 'open', projectsN: 'projects', v_board: 'Board', v_mine: 'My work', v_list: 'List', v_calendar: 'Calendar', v_projects: 'Projects',
     s_online: 'Synced', s_offline: 'Offline', s_pending: 'waiting to send', s_syncing: 'Syncing…', s_error: 'Sync error', s_signin: 'Sign in to sync',
     empty: 'No cards', addCard: '+ Add card', add: 'Add', cancel: 'Cancel', save: 'Save', close: 'Close', edit: 'Edit',
-    reference: 'Reference & team rules', confidential: 'Confidential', approverOnly: 'Approver only',
+    reference: 'Reference & team rules', ownOnly: 'Only your own cards on this board are shown. Ask the admin for full access.', ownTag: 'my cards only', noBoards: 'You have not been given access to any board yet. See your work under My work, or ask the admin for access.', confidential: 'Confidential', approverOnly: 'Approver only',
     title: 'Title', board: 'Board', status: 'Stage', type: 'Type', priority: 'Priority', owner: 'Owner', members: 'Helpers',
     start: 'Start date', due: 'Due date', labels: 'Labels', project: 'Project', parent: 'Parent card', recurrence: 'Repeat',
     link: 'Google Drive link', open: 'Open', description: 'Description', noDescription: 'Click to add a description', checklist: 'Checklist',
@@ -583,7 +583,7 @@ async function persistNow() {
       });
     });
     await Store.set('outbox', S.outbox);
-    await Store.set('data', { email: S.email, meta: S.meta, since: secret.size ? '' : S.since, tables: keep });
+    await Store.set('data', { email: S.email, meta: S.meta, since: secret.size ? '' : S.since, access: S.access || '', tables: keep });
   }
 }
 
@@ -604,6 +604,8 @@ const me = () => (S.meta && S.meta.user) || { role: 'viewer', email: S.email };
 const isApprover = () => ['admin', 'approver'].includes(me().role);
 const canEdit = () => me().role !== 'viewer';
 const boardName = b => b ? (S.lang === 'fa' ? (b.name_dari || b.name_en) : (b.name_en || b.name_dari)) : '';
+const fullBoard = b => !!b && b.access !== 'own';
+const addBoards = () => boardsList().filter(fullBoard);
 const boardsList = () => Object.values(S.t.Boards).filter(b => !isYes(b.archived)).sort((a, b) => Number(a.sort) - Number(b.sort));
 const activeUsers = () => Object.values(S.t.Users).filter(u => isYes(u.active)).sort((a, b) => userName(a.email).localeCompare(userName(b.email)));
 function userName(email) {
@@ -815,7 +817,7 @@ async function signOut() {
 }
 
 function resetData() {
-  S.meta = null; S.since = ''; S.email = '';
+  S.meta = null; S.since = ''; S.email = ''; S.access = '';
   TABLES.forEach(n => { S.t[n] = {}; });
   S.outbox = [];
 }
@@ -848,6 +850,7 @@ async function sync(force) {
   }
   S.syncing = true; renderSync();
   const batch = S.outbox.slice(0, 200);
+  const reqSince = S.since;
   try {
     let out;
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -861,6 +864,17 @@ async function sync(force) {
       return;
     }
     S.syncError = '';
+    if (out.access && out.access !== S.access) {
+      // Access changed (or first sync after this update): drop everything held locally and reload,
+      // so cards from boards no longer allowed disappear from this device.
+      const wasFull = !reqSince;
+      TABLES.forEach(n => { S.t[n] = {}; });
+      S.access = out.access;
+      if (!wasFull) {
+        S.outbox = S.outbox.filter(o => !new Set(batch.map(b => b.opId)).has(o.opId));
+        S.since = ''; persist(); render(); scheduleSync(50); return;
+      }
+    }
     const sent = new Set(batch.map(o => o.opId));
     S.outbox = S.outbox.filter(o => !sent.has(o.opId));
     (out.rejected || []).forEach(r => {
@@ -956,7 +970,7 @@ function render() {
   if (!boards.some(b => b.board_id === S.board)) S.board = (boards[0] || {}).board_id || '';
   const nav = $('boards');
   nav.classList.toggle('hidden', S.view !== 'board');
-  nav.innerHTML = boards.map(b => `<button data-board="${esc(b.board_id)}" class="${b.board_id === S.board ? 'on' : ''}">${esc(boardName(b))}${isYes(b.confidential) ? ` <span class="lock">· ${esc(t('confidential'))}</span>` : ''}</button>`).join('');
+  nav.innerHTML = boards.map(b => `<button data-board="${esc(b.board_id)}" class="${b.board_id === S.board ? 'on' : ''}">${esc(boardName(b))}${isYes(b.confidential) ? ` <span class="lock">· ${esc(t('confidential'))}</span>` : ''}${fullBoard(b) ? '' : ` <span class="lock">· ${esc(t('ownTag'))}</span>`}</button>`).join('');
 
   const open = cards().filter(c => !isDone(c) && c.type !== 'Reference');
   const curBoard = S.t.Boards[S.board];
@@ -1012,6 +1026,8 @@ function cardTile(c, opts = {}) {
 }
 
 function renderBoard() {
+  if (!S.board) return `<div class="empty">${esc(t('noBoards'))}</div>`;
+  const canAddHere = canEdit() && fullBoard(S.t.Boards[S.board]);
   const all = cards().filter(c => c.board_id === S.board && matchesSearch(c));
   const refs = all.filter(c => c.type === 'Reference');
   const parentHere = c => c.parent_card_id && S.t.Cards[c.parent_card_id] && !isYes(S.t.Cards[c.parent_card_id].archived);
@@ -1026,6 +1042,7 @@ function renderBoard() {
     h += `<details class="refs"><summary>📌 ${esc(t('reference'))} (${refs.length})</summary><div class="row">
       ${refs.map(c => `<button data-card="${esc(c.card_id)}">${esc(c.title)}</button>`).join('')}</div></details>`;
   }
+  if (!fullBoard(S.t.Boards[S.board])) h += `<div class="notice">${esc(t('ownOnly'))}</div>`;
   h += '<div class="kanban">';
   stages().forEach(s => {
     const list = work.filter(c => c.status === s.id).sort(sortForColumn);
@@ -1033,7 +1050,7 @@ function renderBoard() {
     h += `<section class="column" data-stage="${s.id}">
       <h3><span>${esc(S.lang === 'fa' ? s.dari : s.en)} ${locked ? `<span class="lockicon">🔒</span>` : ''}</span><span class="n">${list.length}</span></h3>
       ${list.length ? list.map(c => cardTile(c, { drag: canEdit() })).join('') : `<div class="empty">${esc(t('empty'))}</div>`}
-      ${canEdit() && (!locked || isApprover()) ? (S.quickAdd === s.id
+      ${canAddHere && (!locked || isApprover()) ? (S.quickAdd === s.id
         ? `<form class="quick" data-quick="${s.id}"><input id="quick-input" placeholder="${esc(t('title'))}" maxlength="300"><button class="primary">${esc(t('add'))}</button></form>`
         : `<button class="add" data-add="${s.id}">${esc(t('addCard'))}</button>`) : ''}
     </section>`;
@@ -1184,7 +1201,7 @@ function renderProjects() {
   function addForm(key, depth, needBoard, board) {
     return `<form class="tadd" data-treeaddform="${esc(key)}" style="padding-inline-start:${12 + depth * 24}px">
       <input id="tree-add-input" placeholder="${esc(t('title'))}" maxlength="300">
-      ${needBoard ? `<select id="tree-add-board">${boardsList().map(b => opt(b.board_id, boardName(b), board)).join('')}</select>` : ''}
+      ${needBoard ? `<select id="tree-add-board">${addBoards().map(b => opt(b.board_id, boardName(b), board)).join('')}</select>` : ''}
       <button class="primary">${esc(t('add'))}</button><button type="button" data-treeaddcancel>${esc(t('cancel'))}</button></form>`;
   }
   function projectBlock(p) {
@@ -1332,7 +1349,7 @@ function renderCardDialog() {
       </div>
       <aside class="side">
         <div class="field"><label>${esc(t('status'))}</label><select id="f-status" ${dis}>${stages().map(s => opt(s.id, stageName(s.id) + (APPROVER_STAGES.includes(s.id) ? ' 🔒' : ''), c.status, stageLocked(s.id))).join('')}</select></div>
-        <div class="field"><label>${esc(t('board'))}</label><select id="f-board" ${dis}>${boardsList().map(b => opt(b.board_id, boardName(b), c.board_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('board'))}</label><select id="f-board" ${dis}>${boardsList().filter(b => fullBoard(b) || b.board_id === c.board_id).map(b => opt(b.board_id, boardName(b), c.board_id)).join('')}</select></div>
         <div class="field"><label>${esc(t('owner'))}</label><select id="f-owner" ${dis}>${opt('', t('noOwner'), c.owner_email)}${users.map(u => opt(u.email, userName(u.email), c.owner_email)).join('')}</select></div>
         <div class="field"><label>${esc(t('due'))}</label><input type="date" id="f-due" value="${esc(c.due_date)}" ${dis}></div>
         <div class="field"><label>${esc(t('start'))}</label><input type="date" id="f-start" value="${esc(c.start_date)}" ${dis}></div>
@@ -1638,7 +1655,7 @@ function openFromHash() {
   const saved = await Store.get('data');
   S.outbox = (await Store.get('outbox')) || [];
   if (saved && saved.meta) {
-    S.meta = saved.meta; S.email = saved.email; S.since = saved.since || '';
+    S.meta = saved.meta; S.email = saved.email; S.since = saved.since || ''; S.access = saved.access || '';
     TABLES.forEach(n => { S.t[n] = (saved.tables && saved.tables[n]) || {}; });
     S.outbox.forEach(o => { S.t[o.table][o.id] = Object.assign(S.t[o.table][o.id] || { [ID_FIELD[o.table]]: o.id, archived: 'no', created_by: saved.email, created_at: new Date(o.at || Date.now()).toISOString() }, o.fields); });
     if (!lsGet('mla_lang') && S.meta.user.language) setLang(S.meta.user.language);
