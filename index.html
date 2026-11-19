@@ -406,7 +406,7 @@ const CONFIG = {
   API_URL:   'https://script.google.com/macros/s/AKfycbwaGcZ50HSrdr7ZosqhlB0H0BtS_Zev2egQz2KyNx0xnjze4JP3NByyWJPuBWeKrzs/exec',
 };
 /* ============================================= */
-const APP_VERSION = '0.5.0';
+const APP_VERSION = '0.5.1';
 const SYNC_EVERY_MS = 3 * 60 * 1000;
 
 /* ------------------------------------------------------------------ */
@@ -440,7 +440,11 @@ const T = {
     removeProject: 'بدون پروژه', projectNameRequired: 'نام پروژه لازم است.',
     types: { Task: 'کار', Request: 'درخواست', Meeting: 'جلسه', Idea: 'ایده', Reference: 'مرجع' },
     priorities: { '': '—', urgent: 'فوری', high: 'بلند', medium: 'متوسط', low: 'پایین' },
-    recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار (همان تاریخ)', 'nth:1:0': 'یکشنبهٔ اول هر ماه' },
+    recur: { '': 'بدون تکرار', weekly: 'هفته‌وار', monthly: 'ماهوار (همان تاریخ)' },
+    recurWeeklyOn: d => 'هفته‌وار، هر ' + d,
+    recurMonthlyOn: n => 'ماهوار، روز ' + n + ' هر ماه',
+    recurNth: (k, d) => 'ماهوار، ' + d + 'ٔ ' + ['اول', 'دوم', 'سوم', 'چهارم', 'آخر'][k - 1] + ' هر ماه',
+    dowsFull: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'],
     dows: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'],
     months: ['جنوری', 'فبروری', 'مارچ', 'اپریل', 'می', 'جون', 'جولای', 'اگست', 'سپتامبر', 'اکتوبر', 'نومبر', 'دسامبر'],
     errors: {
@@ -477,7 +481,11 @@ const T = {
     removeProject: 'No project', projectNameRequired: 'A project needs a name.',
     types: { Task: 'Task', Request: 'Request', Meeting: 'Meeting', Idea: 'Idea', Reference: 'Reference' },
     priorities: { '': '—', urgent: 'Urgent', high: 'High', medium: 'Medium', low: 'Low' },
-    recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly (same date)', 'nth:1:0': 'First Sunday of each month' },
+    recur: { '': 'Does not repeat', weekly: 'Weekly', monthly: 'Monthly (same date)' },
+    recurWeeklyOn: d => 'Weekly on ' + d,
+    recurMonthlyOn: n => 'Monthly on the ' + n + (n % 10 === 1 && n !== 11 ? 'st' : n % 10 === 2 && n !== 12 ? 'nd' : n % 10 === 3 && n !== 13 ? 'rd' : 'th'),
+    recurNth: (k, d) => 'Monthly on the ' + ['first', 'second', 'third', 'fourth', 'last'][k - 1] + ' ' + d,
+    dowsFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     dows: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     errors: {
@@ -717,6 +725,45 @@ function fmtTime(iso) {
   if (!iso) return '';
   try { return new Date(iso).toLocaleString(S.lang === 'fa' ? 'fa-AF-u-nu-latn' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' }); }
   catch (e) { return iso.slice(0, 16).replace('T', ' '); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Repeat options: built from the card's due date so they always match it */
+/* ------------------------------------------------------------------ */
+function dateParts(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+  if (!m) return null;
+  const y = +m[1], mo = +m[2] - 1, day = +m[3];
+  const dow = new Date(Date.UTC(y, mo, day, 12)).getUTCDay();
+  const dim = new Date(Date.UTC(y, mo + 1, 0, 12)).getUTCDate();
+  return { day, dow, nth: Math.min(Math.ceil(day / 7), 5), isLast: day + 7 > dim };
+}
+function recurLabel(v) {
+  const L = T[S.lang];
+  const m = /^nth:([1-5]):([0-6])$/.exec(String(v || ''));
+  if (m) return L.recurNth(+m[1], L.dowsFull[+m[2]]);
+  return L.recur[v || ''] || v;
+}
+function recurOptions(due, current) {
+  const L = T[S.lang], p = dateParts(due);
+  const list = [['', L.recur['']]];
+  if (!p) { list.push(['weekly', L.recur.weekly], ['monthly', L.recur.monthly]); }
+  else {
+    const d = L.dowsFull[p.dow];
+    list.push(['weekly', L.recurWeeklyOn(d)], ['monthly', L.recurMonthlyOn(p.day)]);
+    if (p.nth <= 4) list.push(['nth:' + p.nth + ':' + p.dow, L.recurNth(p.nth, d)]);
+    if (p.isLast) list.push(['nth:5:' + p.dow, L.recurNth(5, d)]);
+  }
+  if (current && !list.some(o => o[0] === current)) list.push([current, recurLabel(current)]);
+  return list;
+}
+/** When the due date moves, keep an "nth weekday" rule on the new date's weekday. */
+function recurForNewDue(rec, due) {
+  const m = /^nth:([1-5]):([0-6])$/.exec(String(rec || ''));
+  const p = dateParts(due);
+  if (!m || !p) return rec;
+  const n = (+m[1] === 5 && p.isLast) || p.nth === 5 ? 5 : p.nth;
+  return 'nth:' + n + ':' + p.dow;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1358,7 +1405,7 @@ function renderCardDialog() {
         <div class="field"><label>${esc(t('members'))}</label><div class="chips">${users.filter(u => u.email !== c.owner_email).map(u => `<button class="chip ${members.includes(u.email) ? 'on' : ''}" data-member="${esc(u.email)}" ${dis}>${esc(userName(u.email))}</button>`).join('') || `<span class="muted small">${esc(t('none'))}</span>`}</div></div>
         <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${dis}>${opt('', t('noProject'), c.project_id)}${projects.filter(p => p.status !== 'done' || p.project_id === c.project_id).map(p => opt(p.project_id, projShort(p), c.project_id)).join('')}</select></div>
         <div class="field"><label>${esc(t('parent'))}</label><select id="f-parent" ${dis}>${opt('', t('none'), c.parent_card_id)}${boardsList().map(b => { const list = parentChoices.filter(x => x.board_id === b.board_id); return list.length ? `<optgroup label="${esc(boardName(b))}">${list.map(x => opt(x.card_id, x.title.slice(0, 60), c.parent_card_id)).join('')}</optgroup>` : ''; }).join('')}</select></div>
-        <div class="field"><label>${esc(t('recurrence'))}</label><select id="f-recur" ${dis}>${Object.entries(T[S.lang].recur).map(([v, l]) => opt(v, l, c.recurrence)).join('')}</select></div>
+        <div class="field"><label>${esc(t('recurrence'))}</label><select id="f-recur" ${dis}>${recurOptions(c.due_date, c.recurrence || '').map(([v, l]) => opt(v, l, c.recurrence)).join('')}</select></div>
         <div class="field"><label>${esc(t('link'))}</label><div class="quick"><input type="url" id="f-link" value="${esc(c.drive_link)}" placeholder="https://drive.google.com/…" ${dis}>${c.drive_link ? `<a class="badge" href="${esc(c.drive_link)}" target="_blank" rel="noopener">${esc(t('open'))}</a>` : ''}</div></div>
         <div class="small muted">${esc(t('created'))} ${esc(fmtTime(c.created_at))} ${c.created_by ? esc(t('by')) + ' ' + esc(userName(c.created_by)) : ''}</div>
       </aside>
@@ -1585,6 +1632,11 @@ document.addEventListener('change', e => {
   if (field === 'parent_card_id') { setParent(c, v); return; }
   if (field === 'title') { v = v.replace(/\s+/g, ' ').trim(); if (!v) { el.value = c.title; toast(errText('title_required')); return; } }
   if (field === 'status' && !isApprover() && (APPROVER_STAGES.includes(v) || APPROVER_STAGES.includes(c.status))) { el.value = c.status; toast(errText('needs_approver')); return; }
+  if (field === 'due_date' && v !== (c.due_date || '')) {
+    const r = recurForNewDue(c.recurrence, v);
+    change('Cards', c.card_id, r !== (c.recurrence || '') ? { due_date: v, recurrence: r } : { due_date: v });
+    return;
+  }
   if (v !== (c[field] || '')) change('Cards', c.card_id, { [field]: v });
 });
 
