@@ -421,7 +421,8 @@ const T = {
     reference: 'مرجع و قواعد تیم', ownOnly: 'فقط کارهای شما در این بورد نشان داده می‌شود. برای دسترسی کامل، با مدیر تماس بگیرید.', ownTag: 'فقط کارهای من', noBoards: 'هنوز به هیچ بوردی دسترسی ندارید. کارهای خود را در «کارهای من» ببینید، یا از مدیر بخواهید دسترسی بدهد.', confidential: 'محرم', approverOnly: 'فقط تأییدکننده',
     title: 'عنوان', board: 'بورد', status: 'مرحله', type: 'نوع', priority: 'اولویت', owner: 'مسئول', members: 'همکاران',
     start: 'تاریخ آغاز', due: 'تاریخ ختم', labels: 'برچسب‌ها', project: 'پروژه', parent: 'کارت اصلی', recurrence: 'تکرار',
-    link: 'لینک گوگل درایو', open: 'باز کردن', description: 'توضیحات', noDescription: 'برای افزودن توضیحات کلیک کنید', checklist: 'چک‌لیست',
+    notYours: 'این کارت از همکار شماست؛ می‌توانید نظر بنویسید یا وظیفهٔ فرعی اضافه کنید، ولی آن را تغییر داده نمی‌توانید.',
+    link: 'لینک گوگل درایو', linkHint: 'برای «منتظر تأیید» لازم است', open: 'باز کردن', description: 'توضیحات', noDescription: 'برای افزودن توضیحات کلیک کنید', checklist: 'چک‌لیست',
     addItem: 'افزودن مورد…', comments: 'نظرها', writeComment: 'نظر خود را بنویسید…', send: 'فرستادن', history: 'تاریخچهٔ تغییرات', showHistory: 'نمایش تاریخچه',
     subtasks: 'کارهای فرعی', addSubtask: 'افزودن کار فرعی…', none: '—', noOwner: 'بدون مسئول', created: 'ایجاد شد', by: 'توسط',
     whatsapp: 'فرستادن در واتس‌اپ', hide: 'حذف کارت', hideConfirm: 'برای حذف دوباره کلیک کنید', copyLink: 'کاپی لینک کارت', copied: 'لینک کاپی شد',
@@ -453,7 +454,10 @@ const T = {
       network: 'اتصال به سرور ممکن نشد.', needs_approver: 'فقط تأییدکننده یا مدیر می‌تواند کارت را به «تکمیل‌شده» یا «بایگانی» ببرد یا از آن بیرون کند.',
       no_access: 'به این بورد دسترسی ندارید.', read_only: 'حساب شما فقط خواندنی است.', title_required: 'عنوان کارت لازم است.',
       not_your_comment: 'فقط نویسندهٔ نظر می‌تواند آن را تغییر دهد.', admin_only: 'این کار فقط برای مدیر است.', bad_date: 'تاریخ درست نیست.',
-      conflict: 'این کارت همزمان توسط شخص دیگری هم تغییر کرده بود؛ تغییر شما نگه داشته شد و مورد قبلی در جدول Conflicts ثبت شد.' } },
+      conflict: 'این کارت همزمان توسط شخص دیگری هم تغییر کرده بود؛ تغییر شما نگه داشته شد و مورد قبلی در جدول Conflicts ثبت شد.',
+      evidence_required: 'برای بردن کارت به «منتظر تأیید» یا «تکمیل‌شده»، اول لینک نتیجهٔ کار را در خانهٔ «لینک گوگل درایو» بگذارید (فقط لینک drive.google.com یا docs.google.com).',
+      unknown_owner: 'این شخص در فهرست کاربران فعال نیست. مسئول را از فهرست انتخاب کنید.',
+      not_your_card: 'فقط مسئول و همکاران این کارت، یا تأییدکننده، می‌توانند آن را تغییر دهند. شما می‌توانید نظر بنویسید.' } },
   en: {
     signinSub: 'Sign in with your Google account', signout: 'Sign out', other: 'دری', search: 'Search cards…',
     openN: 'open', projectsN: 'projects', v_board: 'Board', v_mine: 'My work', v_list: 'List', v_calendar: 'Calendar', v_projects: 'Projects',
@@ -462,7 +466,8 @@ const T = {
     reference: 'Reference & team rules', ownOnly: 'Only your own cards on this board are shown. Ask the admin for full access.', ownTag: 'my cards only', noBoards: 'You have not been given access to any board yet. See your work under My work, or ask the admin for access.', confidential: 'Confidential', approverOnly: 'Approver only',
     title: 'Title', board: 'Board', status: 'Stage', type: 'Type', priority: 'Priority', owner: 'Owner', members: 'Helpers',
     start: 'Start date', due: 'Due date', labels: 'Labels', project: 'Project', parent: 'Parent card', recurrence: 'Repeat',
-    link: 'Google Drive link', open: 'Open', description: 'Description', noDescription: 'Click to add a description', checklist: 'Checklist',
+    notYours: "This is a colleague's card. You can comment or add a sub-task, but not change it.",
+    link: 'Google Drive link', linkHint: 'needed for Awaiting approval', open: 'Open', description: 'Description', noDescription: 'Click to add a description', checklist: 'Checklist',
     addItem: 'Add an item…', comments: 'Comments', writeComment: 'Write a comment…', send: 'Send', history: 'History', showHistory: 'Show history',
     subtasks: 'Sub-tasks', addSubtask: 'Add a sub-task…', none: '—', noOwner: 'No owner', created: 'Created', by: 'by',
     whatsapp: 'Share on WhatsApp', hide: 'Delete card', hideConfirm: 'Click again to delete', copyLink: 'Copy card link', copied: 'Link copied',
@@ -494,7 +499,10 @@ const T = {
       network: 'Could not reach the server.', needs_approver: 'Only an approver or admin can move a card into or out of Completed or Archive.',
       no_access: "You don't have access to that board.", read_only: 'Your account is read-only.', title_required: 'A card needs a title.',
       not_your_comment: 'Only the author can change a comment.', admin_only: 'Only the admin can do this.', bad_date: 'That date is not valid.',
-      conflict: 'Someone else changed this card at the same time. Your change was kept and the other one was saved in the Conflicts tab.' } },
+      conflict: 'Someone else changed this card at the same time. Your change was kept and the other one was saved in the Conflicts tab.',
+      evidence_required: 'Before moving a card to Awaiting approval or Completed, put the link to the result in the Google Drive link field (a drive.google.com or docs.google.com link).',
+      unknown_owner: 'That person is not an active user. Choose the owner from the list.',
+      not_your_card: "Only the card's owner, its helpers or an approver can change it. You can still comment." } },
 };
 const LABEL_COLORS = { urgent: 'red', high: 'yellow', external: 'blue', management: 'purple', budget: 'green', confidential: 'grey' };
 const TABLES = ['Boards', 'Users', 'Projects', 'Cards', 'Checklist', 'Comments'];
@@ -505,6 +513,16 @@ const DEFAULT_STAGES = [
   { id: 'completed', dari: 'تکمیل‌شده', en: 'Completed' }, { id: 'archive', dari: 'بایگانی', en: 'Archive' },
 ];
 const APPROVER_STAGES = ['completed', 'archive'];
+// Evidence rule (the server checks it too): these stages need a Google Drive link, except for these types.
+const EVIDENCE_STAGES = ['approval', 'completed'];
+const NO_EVIDENCE_TYPES = ['Idea', 'Reference'];
+const isDriveLink = v => /^https:\/\/(drive|docs)\.google\.com\/\S+$/.test(String(v == null ? '' : v).trim());
+const needsEvidence = c => !NO_EVIDENCE_TYPES.includes(c.type || 'Task');
+// Own cards (the server checks it too): owner, helpers, approvers and admins change a card; an unowned card is open.
+const isOwnerOf = c => !String(c.owner_email || '').trim() || c.owner_email === S.email;
+const canEditCard = c => canEdit() && (isApprover() || isOwnerOf(c) || String(c.members || '').split(',').includes(S.email));
+const canAssign = c => canEdit() && (isApprover() || isOwnerOf(c));
+const lacksEvidence = (c, to) => to !== c.status && EVIDENCE_STAGES.includes(to) && needsEvidence(c) && !isDriveLink(c.drive_link);
 
 /* ------------------------------------------------------------------ */
 /* State                                                               */
@@ -1336,8 +1354,9 @@ function closeCard() { S.openCard = null; closeOverlay('card'); try { history.re
 function renderCardDialog() {
   const c = S.t.Cards[S.openCard];
   if (!c) { closeCard(); return; }
-  const ro = !canEdit();
+  const ro = !canEditCard(c);
   const dis = ro ? 'disabled' : '';
+  const assignDis = ro || !canAssign(c) ? 'disabled' : '';
   const opt = (v, label, sel, disabled) => `<option value="${esc(v)}" ${String(sel || '') === v ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(label)}</option>`;
   const items = Object.values(S.t.Checklist).filter(i => i.card_id === c.card_id && !isYes(i.archived)).sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0) || (a.created_at < b.created_at ? -1 : 1));
   const comments = Object.values(S.t.Comments).filter(m => m.card_id === c.card_id).sort((a, b) => a.created_at < b.created_at ? 1 : -1);
@@ -1364,7 +1383,7 @@ function renderCardDialog() {
     <div class="dbody">
       <div>
         ${proj || anc.length ? `<nav class="crumbs">${proj ? `<a data-openproject="${esc(proj.project_id)}">📁 ${esc(proj.name)}</a>` : ''}${anc.map(a => ` › <a data-card="${esc(a.card_id)}">${esc(a.title.slice(0, 50))}</a>`).join('')} › <b>${esc(c.title.slice(0, 50))}</b></nav>` : ''}
-        ${ro ? `<div class="notice">${esc(t('readOnly'))}</div>` : ''}
+        ${ro ? `<div class="notice">${esc(t(canEdit() ? 'notYours' : 'readOnly'))}</div>` : ''}
         ${c.source === 'trello' && c.source_ref ? `<div class="small muted" style="margin-bottom:10px">${esc(t('fromTrello'))}: <a href="${esc(c.source_ref)}" target="_blank" rel="noopener">${esc(c.source_ref.replace('https://', ''))}</a></div>` : ''}
         <div class="sec"><h4>${esc(t('labels'))}</h4><div class="chips">
           ${(S.meta.labels || []).map(l => `<button class="chip ${labels.includes(l.label_id) ? 'on' : ''}" data-label="${esc(l.label_id)}" ${dis}><span class="sw lbl ${LABEL_COLORS[l.label_id] || 'grey'}"></span>${esc(S.lang === 'fa' ? l.name_dari : l.name_en)}</button>`).join('')}
@@ -1383,10 +1402,10 @@ function renderCardDialog() {
             <span class="badge">${esc(stageName(s.status))}</span>${n.length ? `<span class="badge">⤷ ${n.filter(isDone).length}/${n.length}</span>` : ''}
             ${s.due_date ? `<span class="badge ${dueClass(s)}">⏱ ${esc(fmtDate(s.due_date))}</span>` : ''}
             ${s.owner_email ? avatar(s.owner_email) : `<span class="badge warn">${esc(t('noOwner'))}</span>`}</div>`; }).join('')}
-          ${ro ? '' : `<form class="quick" data-addsub style="margin-top:6px"><input id="f-sub" placeholder="${esc(t('addSubtask'))}" maxlength="300"><button>${esc(t('add'))}</button></form>`}
+          ${!canEdit() ? '' : `<form class="quick" data-addsub style="margin-top:6px"><input id="f-sub" placeholder="${esc(t('addSubtask'))}" maxlength="300"><button>${esc(t('add'))}</button></form>`}
         </div>` : ''}
         <div class="sec"><h4>${esc(t('comments'))}</h4>
-          ${ro ? '' : `<form data-addcomment><textarea id="f-comment" rows="2" placeholder="${esc(t('writeComment'))}"></textarea><div style="margin-top:6px"><button class="primary">${esc(t('send'))}</button></div></form>`}
+          ${!canEdit() ? '' : `<form data-addcomment><textarea id="f-comment" rows="2" placeholder="${esc(t('writeComment'))}"></textarea><div style="margin-top:6px"><button class="primary">${esc(t('send'))}</button></div></form>`}
           ${comments.map(m => `<div class="comment"><div class="by">${esc(userName(m.author_email))} · ${esc(fmtTime(m.created_at))}</div><div class="body">${linkify(m.text)}</div></div>`).join('')}
         </div>
         <div class="sec"><h4>${esc(t('history'))}</h4>
@@ -1397,16 +1416,16 @@ function renderCardDialog() {
       <aside class="side">
         <div class="field"><label>${esc(t('status'))}</label><select id="f-status" ${dis}>${stages().map(s => opt(s.id, stageName(s.id) + (APPROVER_STAGES.includes(s.id) ? ' 🔒' : ''), c.status, stageLocked(s.id))).join('')}</select></div>
         <div class="field"><label>${esc(t('board'))}</label><select id="f-board" ${dis}>${boardsList().filter(b => fullBoard(b) || b.board_id === c.board_id).map(b => opt(b.board_id, boardName(b), c.board_id)).join('')}</select></div>
-        <div class="field"><label>${esc(t('owner'))}</label><select id="f-owner" ${dis}>${opt('', t('noOwner'), c.owner_email)}${users.map(u => opt(u.email, userName(u.email), c.owner_email)).join('')}</select></div>
+        <div class="field"><label>${esc(t('owner'))}</label><select id="f-owner" ${assignDis}>${opt('', t('noOwner'), c.owner_email)}${users.map(u => opt(u.email, userName(u.email), c.owner_email)).join('')}</select></div>
         <div class="field"><label>${esc(t('due'))}</label><input type="date" id="f-due" value="${esc(c.due_date)}" ${dis}></div>
         <div class="field"><label>${esc(t('start'))}</label><input type="date" id="f-start" value="${esc(c.start_date)}" ${dis}></div>
         <div class="field"><label>${esc(t('priority'))}</label><select id="f-priority" ${dis}>${Object.entries(T[S.lang].priorities).map(([v, l]) => opt(v, l, c.priority)).join('')}</select></div>
         <div class="field"><label>${esc(t('type'))}</label><select id="f-type" ${dis}>${Object.entries(T[S.lang].types).map(([v, l]) => opt(v, l, c.type || 'Task')).join('')}</select></div>
-        <div class="field"><label>${esc(t('members'))}</label><div class="chips">${users.filter(u => u.email !== c.owner_email).map(u => `<button class="chip ${members.includes(u.email) ? 'on' : ''}" data-member="${esc(u.email)}" ${dis}>${esc(userName(u.email))}</button>`).join('') || `<span class="muted small">${esc(t('none'))}</span>`}</div></div>
-        <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${dis}>${opt('', t('noProject'), c.project_id)}${projects.filter(p => p.status !== 'done' || p.project_id === c.project_id).map(p => opt(p.project_id, projShort(p), c.project_id)).join('')}</select></div>
+        <div class="field"><label>${esc(t('members'))}</label><div class="chips">${users.filter(u => u.email !== c.owner_email).map(u => `<button class="chip ${members.includes(u.email) ? 'on' : ''}" data-member="${esc(u.email)}" ${assignDis}>${esc(userName(u.email))}</button>`).join('') || `<span class="muted small">${esc(t('none'))}</span>`}</div></div>
+        <div class="field"><label>${esc(t('project'))}</label><select id="f-project" ${canEdit() ? '' : 'disabled'}>${opt('', t('noProject'), c.project_id)}${projects.filter(p => p.status !== 'done' || p.project_id === c.project_id).map(p => opt(p.project_id, projShort(p), c.project_id)).join('')}</select></div>
         <div class="field"><label>${esc(t('parent'))}</label><select id="f-parent" ${dis}>${opt('', t('none'), c.parent_card_id)}${boardsList().map(b => { const list = parentChoices.filter(x => x.board_id === b.board_id); return list.length ? `<optgroup label="${esc(boardName(b))}">${list.map(x => opt(x.card_id, x.title.slice(0, 60), c.parent_card_id)).join('')}</optgroup>` : ''; }).join('')}</select></div>
         <div class="field"><label>${esc(t('recurrence'))}</label><select id="f-recur" ${dis}>${recurOptions(c.due_date, c.recurrence || '').map(([v, l]) => opt(v, l, c.recurrence)).join('')}</select></div>
-        <div class="field"><label>${esc(t('link'))}</label><div class="quick"><input type="url" id="f-link" value="${esc(c.drive_link)}" placeholder="https://drive.google.com/…" ${dis}>${c.drive_link ? `<a class="badge" href="${esc(c.drive_link)}" target="_blank" rel="noopener">${esc(t('open'))}</a>` : ''}</div></div>
+        <div class="field"><label>${esc(t('link'))}${needsEvidence(c) && !isDriveLink(c.drive_link) && !EVIDENCE_STAGES.includes(c.status) ? ` <span class="badge warn">${esc(t('linkHint'))}</span>` : ''}</label><div class="quick"><input type="url" id="f-link" value="${esc(c.drive_link)}" placeholder="https://drive.google.com/…" ${dis}>${c.drive_link ? `<a class="badge" href="${esc(c.drive_link)}" target="_blank" rel="noopener">${esc(t('open'))}</a>` : ''}</div></div>
         <div class="small muted">${esc(t('created'))} ${esc(fmtTime(c.created_at))} ${c.created_by ? esc(t('by')) + ' ' + esc(userName(c.created_by)) : ''}</div>
       </aside>
     </div>
@@ -1497,11 +1516,14 @@ document.addEventListener('click', e => {
   if ('bulkclear' in d) { S.selected.clear(); render(); return; }
   if ('bulkapply' in d) {
     const pid = $('bulk-project').value, parentId = $('bulk-parent').value;
+    let skipped = 0;
     [...S.selected].forEach(id => {
       const c = S.t.Cards[id]; if (!c) return;
+      if (parentId && !canEditCard(c)) { skipped++; return; }
       if (parentId) setParent(c, parentId);
       else if (pid) setProject(c, pid === '-' ? '' : pid);
     });
+    if (skipped) toast(errText('not_your_card'));
     S.selected.clear(); render(); return;
   }
   if ('close' in d) { const ov = el.closest('.overlay'); if (ov && ov.dataset.name === 'card') closeCard(); else if (ov) closeOverlay(ov.dataset.name); return; }
@@ -1555,7 +1577,9 @@ document.addEventListener('submit', e => {
   if (d.quick) {
     const v = $('quick-input').value.trim();
     $('quick-input').value = '';
-    if (v) newCard({ board_id: S.board, title: v, status: d.quick });
+    // A new card has no Drive link yet, so it cannot start in Awaiting approval or Completed.
+    if (v && EVIDENCE_STAGES.includes(d.quick)) { newCard({ board_id: S.board, title: v, status: 'in_progress' }); toast(errText('evidence_required')); }
+    else if (v) newCard({ board_id: S.board, title: v, status: d.quick });
     S.quickAdd = d.quick; render(); return;
   }
   if ('saveproject' in d) {
@@ -1622,6 +1646,7 @@ document.addEventListener('change', e => {
   if (el.dataset.assign) { const c = S.t.Cards[el.dataset.assign]; if (c && el.value) { setProject(c, el.value); treeOpen().add('p:' + el.value); saveTree(); } return; }
   const c = S.openCard && S.t.Cards[S.openCard];
   if (!c) return;
+  if (!canEditCard(c) && el.id !== 'f-project') { toast(errText('not_your_card')); renderCardDialog(); return; }
   if (el.dataset.item) { change('Checklist', el.dataset.item, { done: el.checked ? 'yes' : 'no' }); return; }
   const map = { 'f-status': 'status', 'f-board': 'board_id', 'f-owner': 'owner_email', 'f-due': 'due_date', 'f-start': 'start_date',
     'f-priority': 'priority', 'f-type': 'type', 'f-project': 'project_id', 'f-parent': 'parent_card_id', 'f-recur': 'recurrence', 'f-link': 'drive_link', 'f-title': 'title' };
@@ -1632,6 +1657,8 @@ document.addEventListener('change', e => {
   if (field === 'parent_card_id') { setParent(c, v); return; }
   if (field === 'title') { v = v.replace(/\s+/g, ' ').trim(); if (!v) { el.value = c.title; toast(errText('title_required')); return; } }
   if (field === 'status' && !isApprover() && (APPROVER_STAGES.includes(v) || APPROVER_STAGES.includes(c.status))) { el.value = c.status; toast(errText('needs_approver')); return; }
+  if (field === 'status' && lacksEvidence(c, v)) { el.value = c.status; toast(errText('evidence_required')); const l = $('f-link'); if (l) l.focus(); return; }
+  if (field === 'drive_link' && EVIDENCE_STAGES.includes(c.status) && needsEvidence(c) && isDriveLink(c.drive_link) && !isDriveLink(v)) { el.value = c.drive_link; toast(errText('evidence_required')); return; }
   if (field === 'due_date' && v !== (c.due_date || '')) {
     const r = recurForNewDue(c.recurrence, v);
     change('Cards', c.card_id, r !== (c.recurrence || '') ? { due_date: v, recurrence: r } : { due_date: v });
@@ -1670,7 +1697,9 @@ document.addEventListener('drop', e => {
   const c = S.t.Cards[dragId]; dragId = null;
   const to = col.dataset.stage;
   if (!c || c.status === to) return;
+  if (!canEditCard(c)) { toast(errText('not_your_card')); return; }
   if (!isApprover() && (APPROVER_STAGES.includes(to) || APPROVER_STAGES.includes(c.status))) { toast(errText('needs_approver')); return; }
+  if (lacksEvidence(c, to)) { toast(errText('evidence_required')); openCard(c.card_id); return; }
   change('Cards', c.card_id, { status: to });
 });
 
